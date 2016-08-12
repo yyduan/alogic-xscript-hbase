@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<script>
+	<using xmlTag = "kv-conf" module="com.alogic.xscript.hbase.HConf"/>
+	<kv-conf id="hbaseConf" >
+		<h-admin id="HBaseAdmin">
+			<h-drop tname="bbb" />
+		</h-admin>
+	</kv-conf>
+</script>

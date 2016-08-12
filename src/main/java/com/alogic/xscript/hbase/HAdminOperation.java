@@ -25,6 +25,20 @@ public abstract class HAdminOperation extends AbstractLogiclet{
 	 */
 	private String pid = "$kv-admin";
 	
+    /**
+     * 列族：多个用逗号间隔
+     */
+    protected String cfy = "";
+
+    /**
+     * 表名
+     */
+    protected String tname = "";
+
+    /**
+     * 数据集
+     */
+    protected String tag = "data";
 	/**
 	 * 返回结果的id
 	 */
@@ -34,10 +48,14 @@ public abstract class HAdminOperation extends AbstractLogiclet{
 		super(tag, p);
 	}
 	
-	public void configure(Properties p){
+	@Override
+    public void configure(Properties p){
 		super.configure(p);
 		pid = PropertiesConstants.getString(p,"pid", pid,true);
 		id = PropertiesConstants.getString(p,"id", "$" + getXmlTag(),true);
+        cfy = PropertiesConstants.getString(p, "cfy", cfy, true);
+        tname = PropertiesConstants.getString(p, "tname", tname, true);
+        tag = PropertiesConstants.getString(p, "tag", tag, true);
 	}
 
 	@Override
@@ -48,13 +66,12 @@ public abstract class HAdminOperation extends AbstractLogiclet{
 		if (hAdmin == null){
 			throw new BaseException("core.no_hadmin","It must be in a h-admin context,check your script.");
 		}
-		
 		if (StringUtils.isNotEmpty(id)){
 			onExecute(hAdmin,root,current,ctx,watcher);
 		}
 	}
 
-	protected abstract void onExecute(HBaseAdmin row, Map<String, Object> root,
+    protected abstract void onExecute(HBaseAdmin hBaseAdmin, Map<String, Object> root,
 			Map<String, Object> current, LogicletContext ctx,
 			ExecuteWatcher watcher);
 		

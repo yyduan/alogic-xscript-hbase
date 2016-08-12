@@ -1,4 +1,9 @@
 <?xml version="1.0"?>
 <settings>
-
+		<parameter id="callType" value="windows" final="true"/>
+		<parameter id="krb.ini" value="C:\\krb5.ini" final="true"/>
+		<parameter id="core.site.xml" value="C:\\workspace2\\eops-center\\webapp\\eops-center-web\\src\\main\\resources\\conf\\hbase\\test\\core-site.xml" final="true"/>
+		<parameter id="hbase.site.xml" value="C:\\workspace2\\eops-center\\webapp\\eops-center-web\\src\\main\\resources\\conf\\hbase\\test\\hbase-site.xml" final="true"/>
+		<parameter id="loginUser" value="ems/h2m2.ecloud.com" final="true"/>
+		<parameter id="keytabPath" value="C:\\hwg\\ems.app.keytab" final="true"/>
 </settings>

@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<script>
+	<using xmlTag = "kv-conf" module="com.alogic.xscript.hbase.HConf"/>
+	<kv-conf >
+		<h-table tname="bbb">
+			<h-get row="hwg" col="team" value="team1" />
+			<h-put row="hwg" col="M:age" value="30" />
+			<h-put row="hwg" col="M:money" value="100" />
+			<h-put row="hwg" col="F:sex" value="man" />
+			<h-put row="wzf" col="M:money" value="50" />
+		</h-table>
+	</kv-conf>
+</script>
