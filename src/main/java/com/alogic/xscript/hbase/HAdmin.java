@@ -23,8 +23,8 @@ import com.anysoft.util.PropertiesConstants;
  *
  */
 public class HAdmin extends Segment {
-    protected String pid = "$kv-conf";
-    protected String cid = "$kv-admin";
+    protected String pid = "$h-conf";
+    protected String cid = "$h-admin";
 
     public HAdmin(String tag, Logiclet p) {
         super(tag, p);

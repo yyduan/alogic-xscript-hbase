@@ -9,6 +9,7 @@ import org.apache.hadoop.hbase.Cell;
 import org.apache.hadoop.hbase.client.Get;
 import org.apache.hadoop.hbase.client.HTable;
 import org.apache.hadoop.hbase.client.Result;
+import org.apache.hadoop.hbase.filter.FilterList;
 import org.apache.hadoop.hbase.util.Bytes;
 
 import com.alogic.xscript.ExecuteWatcher;
@@ -18,10 +19,6 @@ import com.anysoft.util.BaseException;
 
 public class HGet extends HTableOperation {
 
-    /**
-     * 获取数据的默认编码
-     */
-    protected static String CHARSET_NAME = "UTF-8";
 
     public HGet(String tag, Logiclet p) {
         super(tag, p);
@@ -41,23 +38,20 @@ public class HGet extends HTableOperation {
                 get.addFamily(fcBytes[0]);
             }
         }
-        // if (StringUtils.isNotEmpty(col)) {
-        // byte[] family = null;
-        // byte[] column = null;
-        // if (col.indexOf(":") > -1) {
-        // String[] vars = col.split(":");
-        // family = Bytes.toBytes(vars[0]);
-        // column = Bytes.toBytes(vars[1]);
-        // get.addColumn(family, column);
-        // } else {
-        // family = Bytes.toBytes(col);
-        // get.addFamily(family);
-        // }
-        // }
         try {
             String tagValue = ctx.transform(tag);
             Map<Object, Object> data = new HashMap<>();
             if (StringUtils.isNotEmpty(tagValue)) {
+                if (stime >= 0 && etime >= 0) {
+                    get.setTimeRange(stime, etime);
+                }
+                if (mvers >= 0) {
+                    get.setMaxVersions(mvers);
+                }
+                FilterList flist = doFilter();
+                if (flist != null) {
+                    get.setFilter(flist);
+                }
                 Result result = hTable.get(get);
                 String family;
                 String qualifier;

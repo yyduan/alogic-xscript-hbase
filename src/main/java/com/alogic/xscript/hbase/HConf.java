@@ -25,7 +25,7 @@ import com.anysoft.util.PropertiesConstants;
  *
  */
 public class HConf extends Segment {
-    protected String cid = "$kv-conf";
+    protected String cid = "$h-conf";
 
     protected String krb = null;
     protected String callType = "linux";

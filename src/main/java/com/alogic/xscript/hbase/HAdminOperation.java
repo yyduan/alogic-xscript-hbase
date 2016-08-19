@@ -23,7 +23,7 @@ public abstract class HAdminOperation extends AbstractLogiclet{
 	/**
 	 * hadmin的cid
 	 */
-	private String pid = "$kv-admin";
+    private String pid = "$h-admin";
 	
     /**
      * 列族：多个用逗号间隔

@@ -24,8 +24,8 @@ import com.anysoft.util.PropertiesConstants;
  *
  */
 public class HBaseTable extends Segment {
-    protected String pid = "$kv-conf";
-    protected String cid = "$kv-table";
+    protected String pid = "$h-conf";
+    protected String cid = "$h-table";
     protected String tname = "";
 
     public HBaseTable(String tag, Logiclet p) {

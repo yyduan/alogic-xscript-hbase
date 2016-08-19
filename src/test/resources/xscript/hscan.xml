@@ -3,7 +3,10 @@
 	<using xmlTag = "h-conf" module="com.alogic.xscript.hbase.HConf"/>
 	<h-conf >
 		<h-table tname="bbb">
-			<h-get tag="data" row="hwg" col="F" />
+			<!-- <h-scan tag="data"  col="M" srow="hwg" erow="hwi" /> -->
+			<!-- <h-scan tag="data" ftype="AND"  filter="PrefixFilter,hw;SingleColumnValueFilter,M,money,0" /> -->
+			<h-scan tag="data"   filter="RowFilter,SubstringComparator,hw" />
+			<!-- <h-scan tag="data"   filter="SingleColumnValueFilter,M,money,0" /> -->
 			<!-- <h-put row="hwg" col="M:age" value="30" />
 			<h-put row="hwg" col="M:money" value="100" />
 			<h-put row="hwg" col="F:sex" value="man" />
