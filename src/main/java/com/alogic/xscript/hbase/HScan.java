@@ -10,20 +10,78 @@ import org.apache.hadoop.hbase.client.HTable;
 import org.apache.hadoop.hbase.client.Result;
 import org.apache.hadoop.hbase.client.ResultScanner;
 import org.apache.hadoop.hbase.client.Scan;
-import org.apache.hadoop.hbase.filter.FilterList;
+import org.apache.hadoop.hbase.filter.Filter;
 import org.apache.hadoop.hbase.util.Bytes;
+import org.w3c.dom.Element;
 
 import com.alogic.xscript.ExecuteWatcher;
 import com.alogic.xscript.Logiclet;
 import com.alogic.xscript.LogicletContext;
+import com.alogic.xscript.hbase.util.FilterBuilder;
 import com.anysoft.util.BaseException;
+import com.anysoft.util.Properties;
+import com.anysoft.util.PropertiesConstants;
+import com.anysoft.util.XmlElementProperties;
+import com.anysoft.util.XmlTools;
 
 public class HScan extends HTableOperation {
-
+	/**
+	 * Filter Builder
+	 */
+	protected FilterBuilder fb = null;
+    /**
+     * 指定查询rowkey的开始点
+     */
+    protected String srow = null;
+    /**
+     * 指定查询rowkey的结束点
+     */
+    protected String erow = null;
+ 
+    /**
+     * 指定查询开始时间戳
+     */
+    protected Long stime = null;
+    /**
+     * 指定查询结束时间戳
+     */
+    protected Long etime = null;    
+    
+    /**
+     * 列出的版本最大数
+     */
+    protected Integer mvers = null;    
+    
     public HScan(String tag, Logiclet p) {
         super(tag, p);
     }
 
+    @Override
+    public void configure(Element e,Properties p){
+    	Properties props = new XmlElementProperties(e,p);
+    	
+    	Element filter = XmlTools.getFirstElementByPath(e, "filter");
+    	if (filter != null){
+	    	FilterBuilder.TheFactory f = new FilterBuilder.TheFactory();
+	    	try {
+	    		fb = f.newInstance(filter, props, "module");
+	    	}catch (Exception ex){
+	    		log("Can not create instance of FilterBuilder.","error");
+	    	}
+    	}
+    	configure(props);
+    }
+    
+    @Override 
+    public void configure(Properties p){
+    	super.configure(p);
+        srow = PropertiesConstants.getString(p, "srow", srow, true);
+        erow = PropertiesConstants.getString(p, "erow", erow, true);    	
+        stime = PropertiesConstants.getLong(p, "stime", -1, true);
+        etime = PropertiesConstants.getLong(p, "etime", -1, true);        
+        mvers = PropertiesConstants.getInt(p, "version", -1, true);        
+    }
+    
     @Override
     protected void onExecute(HTable hTable, Map<String, Object> root, Map<String, Object> current, LogicletContext ctx, ExecuteWatcher watcher) {
         Scan scan = new Scan();
@@ -51,9 +109,11 @@ public class HScan extends HTableOperation {
                 if (mvers >= 0) {
                     scan.setMaxVersions(mvers);
                 }
-                FilterList flist = doFilter();
-                if (flist != null) {
-                    scan.setFilter(flist);
+                if (fb != null){
+                	Filter f = fb.getFilter(ctx);
+                	if (f != null){
+                		scan.setFilter(f);
+                	}
                 }
                 ResultScanner rs = hTable.getScanner(scan);
                 String row;

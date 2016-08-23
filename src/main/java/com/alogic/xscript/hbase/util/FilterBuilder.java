@@ -166,7 +166,7 @@ public interface FilterBuilder extends XMLConfigurable,Configurable{
 				}
 			}
 			
-			configure(e,props);
+			configure(props);
 		}		
 	}
 	

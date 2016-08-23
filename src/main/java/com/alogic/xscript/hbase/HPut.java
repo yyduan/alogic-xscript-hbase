@@ -19,6 +19,7 @@ public class HPut extends HTableOperation {
     public HPut(String tag, Logiclet p) {
         super(tag, p);
     }
+    
 
     @Override
     protected void onExecute(HTable hTable, Map<String, Object> root, Map<String, Object> current, LogicletContext ctx, ExecuteWatcher watcher) {
