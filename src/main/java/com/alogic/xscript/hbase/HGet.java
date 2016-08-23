@@ -40,7 +40,7 @@ public class HGet extends HTableOperation {
         }
         try {
             String tagValue = ctx.transform(tag);
-            Map<Object, Object> data = new HashMap<>();
+            Map<String, Object> data = new HashMap<String, Object>();
             if (StringUtils.isNotEmpty(tagValue)) {
                 if (stime >= 0 && etime >= 0) {
                     get.setTimeRange(stime, etime);

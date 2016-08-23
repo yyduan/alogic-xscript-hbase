@@ -1,6 +1,5 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
-  <groupId>com.github.anylogic</groupId>
   <artifactId>alogic-xscript-hbase</artifactId>
   <version>0.98.4-hadoop2-SNAPSHOT</version>
 	<properties>
@@ -19,57 +18,10 @@
 		    <artifactId>hbase-client</artifactId>
 		    <version>0.98.4-hadoop2</version>
 		</dependency>
-		<dependency>
-		        <groupId>jdk.tools</groupId>
-		        <artifactId>jdk.tools</artifactId>
-		        <version>1.6</version>
-		        <scope>system</scope>
-		        <systemPath>${JAVA_HOME}/lib/tools.jar</systemPath>
-		    </dependency>
-	</dependencies>
-
-	<distributionManagement>
-		<repository>
-			<id>releases</id>
-			<name>Internal Releases</name>
-			<url>http://10.142.90.52:8002/content/repositories/releases</url>
-		</repository>
-		<snapshotRepository>
-			<id>snapshots</id>
-			<name>Internal Snapshots</name>
-			<url>http://10.142.90.52:8002/content/repositories/snapshots</url>
-		</snapshotRepository>
-	</distributionManagement>
-
-	<build>
-		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-javadoc-plugin</artifactId>
-				<version>2.10.1</version>
-				<configuration>
-					<charset>UTF-8</charset>
-					<docencoding>UTF-8</docencoding>
-					<aggregate>true</aggregate>
-				</configuration>
-				<executions>
-					<execution>
-						<id>attach-javadocs</id>
-						<goals>
-							<goal>jar</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.2</version>
-				<configuration>
-					<source>1.7</source>
-					<target>1.7</target>
-				</configuration>
-			</plugin>
-		</plugins>
-	</build>      
+	</dependencies>     
+	<parent>
+		<groupId>com.github.anylogic</groupId>
+		<artifactId>alogic</artifactId>
+		<version>1.6.5</version>
+	</parent>
 </project>

@@ -37,7 +37,7 @@ public class HScan extends HTableOperation {
         }
         try {
             String tagValue = ctx.transform(tag);
-            Map<Object, Object> rows = new HashMap<>();
+            Map<String, Object> rows = new HashMap<String, Object>();
             if (StringUtils.isNotEmpty(tagValue)) {
                 if (StringUtils.isNotEmpty(srow)) {
                     scan.setStartRow(Bytes.toBytes(srow));
@@ -57,10 +57,10 @@ public class HScan extends HTableOperation {
                 }
                 ResultScanner rs = hTable.getScanner(scan);
                 String row;
-                Map<Object, Object> data;
+                Map<String, Object> data;
                 for (Result r : rs) {
                     row = new String(r.getRow());
-                    data = new HashMap<>();
+                    data = new HashMap<String, Object>();
                     if (r.size() > 0) {
                         String family;
                         String qualifier;
