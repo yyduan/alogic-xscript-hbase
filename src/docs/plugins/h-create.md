@@ -16,7 +16,8 @@ com.alogic.xscript.hbase.HCreate
 | ---- | ---- | ---- |
 | 1 | pid | admin的上下文对象id,缺省为$h-admin | 
 | 2 | tname | 表名,必要 | 
-| 2 | cfy | 列族,多列族逗号间隔,必要 | 
+| 3 | cf | 列族,多列族逗号间隔,必要 | 
+| 4 | cover | 如果已存在表是否被覆盖，默认不覆盖false，覆盖=true | 
 
 
 ### 案例
@@ -25,10 +26,10 @@ com.alogic.xscript.hbase.HCreate
 
 ```xml
 	<script>
-	<using xmlTag = "h-conf" module="com.alogic.xscript.hbase.HConf"/>
-	<h-conf id="hbaseConf" >
-		<h-admin id="HBaseAdmin">
-			<h-create tname="bbb" cfy="M,F,team"  />
+	<h-conf zkQuorum="h2a1.ecloud.com,h2m1.ecloud.com,h2m2.ecloud.com" zkParent="/hbase-secure">
+	<h-conf >
+		<h-admin >
+			<h-create tname="bbb" cf="M,F,team" cover="true"  />
 		</h-admin>
 	</h-conf>
 </script>

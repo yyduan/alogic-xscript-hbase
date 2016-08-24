@@ -13,3 +13,4 @@ alogic-xscript-hbase插件包括：
 	- [删除数据h-delete](plugins/h-delete.md)
 	- [查询单行数据h-get](plugins/h-get.md)
 	- [扫描多行数据h-scan](plugins/h-scan.md)
+	- [过滤器filter](plugins/filters/Filter.md)

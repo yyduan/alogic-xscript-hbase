@@ -29,8 +29,8 @@ com.alogic.xscript.hbase.HAdmin
 ```xml
 	<script>
 	<using xmlTag = "kv-conf" module="com.alogic.xscript.hbase.HConf"/>
-	<h-conf id="hbaseConf" >
-		<h-admin id="HBaseAdmin">
+	<h-conf zkQuorum="h2a1.ecloud.com,h2m1.ecloud.com,h2m2.ecloud.com" zkParent="/hbase-secure">
+		<h-admin >
 			
 		</h-admin>
 	</h-conf>

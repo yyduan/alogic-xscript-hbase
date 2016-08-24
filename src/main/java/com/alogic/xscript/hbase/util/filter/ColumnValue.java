@@ -15,28 +15,26 @@ import com.anysoft.util.PropertiesConstants;
  * @author duanyy
  *
  */
-public class ColumnValue extends FilterBuilder.Abstract{
-	protected Filter filter;
-	
-	@Override
-	public Filter getFilter(Properties p) {
-		return filter;
-	}
+public class ColumnValue extends FilterBuilder.Abstract {
+    protected Filter filter;
 
-	@Override
-	public void configure(Properties p) {
-		String family = PropertiesConstants.getString(p,"family","");
-		String qualifier = PropertiesConstants.getString(p,"qualifier","");		
-		String value = PropertiesConstants.getString(p,"value","");
-		
-		String op = PropertiesConstants.getString(p,"operator","EQUAL");
-		
-		filter = new SingleColumnValueFilter(
-				Bytes.toBytes(family),
-				Bytes.toBytes(qualifier),
-				getCompareOp(op),
-				new BinaryComparator(Bytes.toBytes(value))
-				);
-	}
+    @Override
+    public Filter getFilter(Properties p) {
+        return filter;
+    }
+
+    @Override
+    public void configure(Properties p) {
+        String family = PropertiesConstants.getString(p, "family", "");
+        String qualifier = PropertiesConstants.getString(p, "qualifier", "");
+        String value = PropertiesConstants.getString(p, "value", "");
+
+        String op = PropertiesConstants.getString(p, "operator", "EQUAL");
+
+        SingleColumnValueFilter f = new SingleColumnValueFilter(Bytes.toBytes(family), Bytes.toBytes(qualifier), getCompareOp(op), new BinaryComparator(
+                Bytes.toBytes(value)));
+        f.setFilterIfMissing(true);
+        filter = f;
+    }
 
 }

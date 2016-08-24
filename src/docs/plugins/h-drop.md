@@ -25,8 +25,8 @@ com.alogic.xscript.hbase.HDrop
 ```xml
 	<script>
 	<using xmlTag = "h-conf" module="com.alogic.xscript.hbase.HConf"/>
-	<h-conf id="hbaseConf" >
-		<h-admin id="HBaseAdmin">
+	<h-conf zkQuorum="h2a1.ecloud.com,h2m1.ecloud.com,h2m2.ecloud.com" zkParent="/hbase-secure">
+		<h-admin>
 			<h-drop tname="bbb" />
 		</h-admin>
 	</h-conf>

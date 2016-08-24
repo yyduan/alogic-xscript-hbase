@@ -1,7 +1,9 @@
 package com.alogic.xscript.hbase;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
@@ -17,6 +19,7 @@ import org.w3c.dom.Element;
 import com.alogic.xscript.ExecuteWatcher;
 import com.alogic.xscript.Logiclet;
 import com.alogic.xscript.LogicletContext;
+import com.alogic.xscript.hbase.util.FColumnUtil;
 import com.alogic.xscript.hbase.util.FilterBuilder;
 import com.anysoft.util.BaseException;
 import com.anysoft.util.Properties;
@@ -25,10 +28,10 @@ import com.anysoft.util.XmlElementProperties;
 import com.anysoft.util.XmlTools;
 
 public class HScan extends HTableOperation {
-	/**
-	 * Filter Builder
-	 */
-	protected FilterBuilder fb = null;
+    /**
+     * Filter Builder
+     */
+    protected FilterBuilder fb = null;
     /**
      * 指定查询rowkey的开始点
      */
@@ -37,7 +40,7 @@ public class HScan extends HTableOperation {
      * 指定查询rowkey的结束点
      */
     protected String erow = null;
- 
+
     /**
      * 指定查询开始时间戳
      */
@@ -45,47 +48,53 @@ public class HScan extends HTableOperation {
     /**
      * 指定查询结束时间戳
      */
-    protected Long etime = null;    
-    
+    protected Long etime = null;
+
     /**
      * 列出的版本最大数
      */
-    protected Integer mvers = null;    
-    
+    protected Integer mvers = null;
+
+    /**
+     * 列名(包含列族:列名)
+     */
+    protected String col = "";
+
     public HScan(String tag, Logiclet p) {
         super(tag, p);
     }
 
     @Override
-    public void configure(Element e,Properties p){
-    	Properties props = new XmlElementProperties(e,p);
-    	
-    	Element filter = XmlTools.getFirstElementByPath(e, "filter");
-    	if (filter != null){
-	    	FilterBuilder.TheFactory f = new FilterBuilder.TheFactory();
-	    	try {
-	    		fb = f.newInstance(filter, props, "module");
-	    	}catch (Exception ex){
-	    		log("Can not create instance of FilterBuilder.","error");
-	    	}
-    	}
-    	configure(props);
+    public void configure(Element e, Properties p) {
+        Properties props = new XmlElementProperties(e, p);
+
+        Element filter = XmlTools.getFirstElementByPath(e, "filter");
+        if (filter != null) {
+            FilterBuilder.TheFactory f = new FilterBuilder.TheFactory();
+            try {
+                fb = f.newInstance(filter, props, "module");
+            } catch (Exception ex) {
+                log("Can not create instance of FilterBuilder.", "error");
+            }
+        }
+        configure(props);
     }
-    
-    @Override 
-    public void configure(Properties p){
-    	super.configure(p);
+
+    @Override
+    public void configure(Properties p) {
+        super.configure(p);
         srow = PropertiesConstants.getString(p, "srow", srow, true);
-        erow = PropertiesConstants.getString(p, "erow", erow, true);    	
+        erow = PropertiesConstants.getString(p, "erow", erow, true);
         stime = PropertiesConstants.getLong(p, "stime", -1, true);
-        etime = PropertiesConstants.getLong(p, "etime", -1, true);        
-        mvers = PropertiesConstants.getInt(p, "version", -1, true);        
+        etime = PropertiesConstants.getLong(p, "etime", -1, true);
+        mvers = PropertiesConstants.getInt(p, "version", -1, true);
+        col = PropertiesConstants.getString(p, "col", col, true);
     }
-    
+
     @Override
     protected void onExecute(HTable hTable, Map<String, Object> root, Map<String, Object> current, LogicletContext ctx, ExecuteWatcher watcher) {
         Scan scan = new Scan();
-        byte[][] fcBytes = getFamilyAndColumnBytes();
+        byte[][] fcBytes = FColumnUtil.getFamilyAndColumnBytes(col);
         if (fcBytes != null) {
             if (fcBytes[1] != null) {
                 scan.addColumn(fcBytes[0], fcBytes[1]);
@@ -95,7 +104,7 @@ public class HScan extends HTableOperation {
         }
         try {
             String tagValue = ctx.transform(tag);
-            Map<String, Object> rows = new HashMap<String, Object>();
+            List<Map<String, Object>> rows = new ArrayList<>();
             if (StringUtils.isNotEmpty(tagValue)) {
                 if (StringUtils.isNotEmpty(srow)) {
                     scan.setStartRow(Bytes.toBytes(srow));
@@ -109,11 +118,11 @@ public class HScan extends HTableOperation {
                 if (mvers >= 0) {
                     scan.setMaxVersions(mvers);
                 }
-                if (fb != null){
-                	Filter f = fb.getFilter(ctx);
-                	if (f != null){
-                		scan.setFilter(f);
-                	}
+                if (fb != null) {
+                    Filter f = fb.getFilter(ctx);
+                    if (f != null) {
+                        scan.setFilter(f);
+                    }
                 }
                 ResultScanner rs = hTable.getScanner(scan);
                 String row;
@@ -121,6 +130,7 @@ public class HScan extends HTableOperation {
                 for (Result r : rs) {
                     row = new String(r.getRow());
                     data = new HashMap<String, Object>();
+                    data.put("row", row);
                     if (r.size() > 0) {
                         String family;
                         String qualifier;
@@ -136,7 +146,7 @@ public class HScan extends HTableOperation {
                             }
                         }
                     }
-                    rows.put(row, data);
+                    rows.add(data);
                 }
             }
             current.put(tagValue, rows);

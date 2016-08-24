@@ -23,11 +23,10 @@ com.alogic.xscript.hbase.HGet
 | 7 | srow | 指定查询rowkey的开始点,字母先后顺序的,可选 | 
 | 8 | erow | 指定查询rowkey的结束点,字母先后顺序的,可选 | 
 | 9 | mvers | 列出的版本最大数,可选 | 
-| 10 | ftype | 多条件过滤,AND 和 OR 两种关系,默认为OR,可选 | 
-| 11 | filter | 过滤器,参数格式(方法名,参数...)例如："ColumnPrefixFilter,hwg",可选 | 
+
 
 备注：
-[过滤器Filer使用方法介绍](h-filter.md)
+[过滤器Filer使用方法介绍](filters/Filter.md)
 
 
 ### 案例
@@ -37,7 +36,7 @@ com.alogic.xscript.hbase.HGet
 ```xml
 <script>
 	<using xmlTag = "h-conf" module="com.alogic.xscript.hbase.HConf"/>
-	<h-conf >
+	<h-conf zkQuorum="h2a1.ecloud.com,h2m1.ecloud.com,h2m2.ecloud.com" zkParent="/hbase-secure">
 		<h-table tname="bbb">
 			<h-get tag="data" row="hwg" col="F" />
 			

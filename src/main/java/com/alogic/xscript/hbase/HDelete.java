@@ -11,7 +11,10 @@ import org.apache.hadoop.hbase.util.Bytes;
 import com.alogic.xscript.ExecuteWatcher;
 import com.alogic.xscript.Logiclet;
 import com.alogic.xscript.LogicletContext;
+import com.alogic.xscript.hbase.util.FColumnUtil;
 import com.anysoft.util.BaseException;
+import com.anysoft.util.Properties;
+import com.anysoft.util.PropertiesConstants;
 
 /**
  * 执行Delete操作
@@ -21,8 +24,24 @@ import com.anysoft.util.BaseException;
  */
 public class HDelete extends HTableOperation {
 
+    /**
+     * 行名rowkey
+     */
+    protected String row = "";
+    /**
+     * 列名(包含列族:列名)
+     */
+    protected String col = "";
+
     public HDelete(String tag, Logiclet p) {
         super(tag, p);
+    }
+
+    @Override
+    public void configure(Properties p) {
+        super.configure(p);
+        row = PropertiesConstants.getString(p, "row", row, true);
+        col = PropertiesConstants.getString(p, "col", col, true);
     }
 
     @Override
@@ -31,7 +50,7 @@ public class HDelete extends HTableOperation {
             throw new BaseException("core.no_row", "It must be in a h-delete context,check your script.");
         }
         Delete delete = new Delete(Bytes.toBytes(row));
-        byte[][] fcBytes = getFamilyAndColumnBytes();
+        byte[][] fcBytes = FColumnUtil.getFamilyAndColumnBytes(col);
         if (fcBytes != null) {
             if (fcBytes[1] != null) {
                 delete.deleteColumn(fcBytes[0], fcBytes[1]);

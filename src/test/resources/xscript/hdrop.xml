@@ -3,7 +3,7 @@
 	<using xmlTag = "h-conf" module="com.alogic.xscript.hbase.HConf"/>
 	<h-conf id="hbaseConf" >
 		<h-admin id="HBaseAdmin">
-			<h-drop tname="bbb" />
+			<h-drop tname="aaabbb" />
 		</h-admin>
 	</h-conf>
 </script>

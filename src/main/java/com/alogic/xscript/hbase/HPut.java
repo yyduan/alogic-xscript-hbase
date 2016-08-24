@@ -12,14 +12,38 @@ import org.apache.hadoop.hbase.util.Bytes;
 import com.alogic.xscript.ExecuteWatcher;
 import com.alogic.xscript.Logiclet;
 import com.alogic.xscript.LogicletContext;
+import com.alogic.xscript.hbase.util.FColumnUtil;
 import com.anysoft.util.BaseException;
+import com.anysoft.util.Properties;
+import com.anysoft.util.PropertiesConstants;
 
 public class HPut extends HTableOperation {
+
+    /**
+     * 行名rowkey
+     */
+    protected String row = "";
+    /**
+     * 列名(包含列族:列名)
+     */
+    protected String col = "";
+
+    /**
+     * 列值
+     */
+    protected String value = "";
 
     public HPut(String tag, Logiclet p) {
         super(tag, p);
     }
-    
+
+    @Override
+    public void configure(Properties p) {
+        super.configure(p);
+        row = PropertiesConstants.getString(p, "row", row, true);
+        col = PropertiesConstants.getString(p, "col", col, true);
+        value = PropertiesConstants.getString(p, "value", value, true);
+    }
 
     @Override
     protected void onExecute(HTable hTable, Map<String, Object> root, Map<String, Object> current, LogicletContext ctx, ExecuteWatcher watcher) {
@@ -37,7 +61,8 @@ public class HPut extends HTableOperation {
         Put p = new Put(Bytes.toBytes(row));
         byte[] column = null;
         byte[] family = null;
-        byte[][] fcBytes = getFamilyAndColumnBytes();
+        byte[][] fcBytes = FColumnUtil.getFamilyAndColumnBytes(col);
+        ;
         if (fcBytes != null) {
             family = fcBytes[0];
             column = fcBytes[1];

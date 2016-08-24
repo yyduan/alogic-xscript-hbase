@@ -1,9 +1,9 @@
 <?xml version="1.0"?>
 <script>
 	<using xmlTag = "h-conf" module="com.alogic.xscript.hbase.HConf"/>
-	<h-conf id="hbaseConf" >
-		<h-admin id="HBaseAdmin">
-			<h-create tname="bbb" cfy="M,F,team"  />
+	<h-conf zkQuorum="h2a1.ecloud.com,h2m1.ecloud.com,h2m2.ecloud.com" zkParent="/hbase-secure">
+		<h-admin >
+			<h-create tname="aaabbb" cf="M,F,team" cover="true"  />
 		</h-admin>
 	</h-conf>
 </script>

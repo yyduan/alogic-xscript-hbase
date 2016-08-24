@@ -13,6 +13,8 @@ import com.alogic.xscript.ExecuteWatcher;
 import com.alogic.xscript.Logiclet;
 import com.alogic.xscript.LogicletContext;
 import com.anysoft.util.BaseException;
+import com.anysoft.util.Properties;
+import com.anysoft.util.PropertiesConstants;
 
 /**
  * HBase列出所有表
@@ -22,8 +24,19 @@ import com.anysoft.util.BaseException;
  */
 public class HList extends HAdminOperation {
 
+    /**
+     * 数据集
+     */
+    protected String tag = "data";
+
     public HList(String tag, Logiclet p) {
         super(tag, p);
+    }
+
+    @Override
+    public void configure(Properties p) {
+        super.configure(p);
+        tag = PropertiesConstants.getString(p, "tag", tag, true);
     }
 
     @Override

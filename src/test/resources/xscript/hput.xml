@@ -1,14 +1,15 @@
 <?xml version="1.0"?>
 <script>
-	<using xmlTag = "kv-conf" module="com.alogic.xscript.hbase.HConf"/>
-	<kv-conf >
-		<h-table tname="bbb">
-			<h-put row="hwg" col="team" value="team1" />
+	<using xmlTag = "h-conf" module="com.alogic.xscript.hbase.HConf"/>
+	<!-- <h-conf zkQuorum="h3a1.ecloud.com,h3m1.ecloud.com,h3m2.ecloud.com" zkParent="/hbase-h3"> -->
+	<h-conf zkQuorum="h2a1.ecloud.com,h2m1.ecloud.com,h2m2.ecloud.com" zkParent="/hbase-secure">
+		<h-table tname="aaabbb">
+			<h-put row="hwg" col="team" value="{'aaa':'1'}" />
 			<h-put row="hwg" col="M:age" value="30" />
 			<h-put row="hwg" col="M:money" value="100" />
 			<h-put row="hwg" col="F:sex" value="man" />
 			<h-put row="hwk" col="F:sex" value="girl" />
 			<h-put row="wzf" col="M:money" value="50" />
 		</h-table>
-	</kv-conf>
+	</h-conf>
 </script>

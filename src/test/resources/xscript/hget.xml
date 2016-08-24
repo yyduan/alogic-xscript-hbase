@@ -2,8 +2,8 @@
 <script>
 	<using xmlTag = "h-conf" module="com.alogic.xscript.hbase.HConf"/>
 	<h-conf >
-		<h-table tname="bbb">
-			<h-get tag="data" row="hwg" col="F" />
+		<h-table tname="aaabbb">
+			<h-get tag="data" row="hwg" />
 			<!-- <h-put row="hwg" col="M:age" value="30" />
 			<h-put row="hwg" col="M:money" value="100" />
 			<h-put row="hwg" col="F:sex" value="man" />

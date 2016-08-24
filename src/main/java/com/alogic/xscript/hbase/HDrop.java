@@ -10,6 +10,8 @@ import com.alogic.xscript.ExecuteWatcher;
 import com.alogic.xscript.Logiclet;
 import com.alogic.xscript.LogicletContext;
 import com.anysoft.util.BaseException;
+import com.anysoft.util.Properties;
+import com.anysoft.util.PropertiesConstants;
 
 /**
  * 在hbase中删除指定的表
@@ -19,8 +21,21 @@ import com.anysoft.util.BaseException;
  */
 public class HDrop extends HAdminOperation {
 
+    /**
+     * 表名
+     */
+    protected String tname = "";
+
     public HDrop(String tag, Logiclet p) {
         super(tag, p);
+    }
+
+    @Override
+    public void configure(Properties p) {
+        super.configure(p);
+
+        tname = PropertiesConstants.getString(p, "tname", tname, true);
+
     }
 
     @Override

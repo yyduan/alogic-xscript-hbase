@@ -55,7 +55,7 @@ public interface FilterBuilder extends XMLConfigurable,Configurable{
 		@Override
 		public void configure(Element e, Properties p) {
 			Properties props = new XmlElementProperties(e,p);
-			configure(e,props);
+            configure(props);
 		}
 		
 		protected CompareOp getCompareOp(String name){
@@ -177,7 +177,8 @@ public interface FilterBuilder extends XMLConfigurable,Configurable{
 	 *
 	 */
 	public static class TheFactory extends Factory<FilterBuilder>{
-		public String getClassName(String module){
+		@Override
+        public String getClassName(String module){
 			if (module.indexOf(".") < 0){
 				return "com.alogic.xscript.hbase.util.filter." + module;
 			}

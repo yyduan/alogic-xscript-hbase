@@ -22,11 +22,9 @@ com.alogic.xscript.hbase.HGet
 | 7 | srow | 指定查询rowkey的开始点,字母先后顺序的,可选 | 
 | 8 | erow | 指定查询rowkey的结束点,字母先后顺序的,可选 | 
 | 9 | mvers | 列出的版本最大数,可选 | 
-| 10 | ftype | 多条件过滤,AND 和 OR 两种关系,默认为OR,可选 | 
-| 11 | filter | 过滤器,参数格式(方法名,参数...)例如："ColumnPrefixFilter,hwg",可选 | 
 
 备注：
-[过滤器Filer使用方法介绍](h-filter.md)
+[过滤器Filer使用方法介绍](filters/Filter.md)
 
 
 ### 案例
@@ -36,11 +34,16 @@ com.alogic.xscript.hbase.HGet
 ```xml
 <script>
 	<using xmlTag = "h-conf" module="com.alogic.xscript.hbase.HConf"/>
-	<h-conf >
-		<h-table tname="bbb">
-			<!-- <h-scan tag="data"  col="M" srow="hwg" erow="hwi" /> -->
-			<!-- <h-scan tag="data" ftype="AND"  filter="PrefixFilter,hw;SingleColumnValueFilter,M,money,0" /> -->
-			<h-scan tag="data"   filter="RowFilter,SubstringComparator,hw" />
+	<h-conf zkQuorum="h2a1.ecloud.com,h2m1.ecloud.com,h2m2.ecloud.com" zkParent="/hbase-secure">
+		<h-table tname="aaabbb">
+			 <h-scan tag="data"  >
+			 <filter module="And">
+		       <!--  <filter module="Prefix"  prefix="hw" /> -->
+		        <!-- <filter module="Row" comparator="Substring" value="hw" operator="EQUAL"/> ->
+		        <!-- <filter module="ColumnPrefix" prefix="M" /> -->
+		        <filter module="ColumnValue" family="M" qualifier="money" value="50" operator="EQUAL"/>
+		    </filter>
+			 </h-scan> 
 		</h-table>
 	</h-conf>
 </script>
@@ -48,9 +51,9 @@ com.alogic.xscript.hbase.HGet
 
 返回值格式：
 
-{"行rowkey":{“列族:列名”：“值”,...},...}
+{{"row":"rowkey值","列族:列名"："值",...},...}
 
 样例：
 ```json
-	{"data":{"hwg":{"F:sex":"man","M:age":"30","M:money":"100"},"hwk":{"F:sex":"girl"}}}
+	{"data":[{"row":"wzf","M:money":"50"}]}
 ```

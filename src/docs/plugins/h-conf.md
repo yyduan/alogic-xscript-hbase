@@ -17,18 +17,31 @@ windows支持下列参数：
 
 | 编号 | 代码 | 说明 |
 | ---- | ---- | ---- |
-| 1 | callType | 取值为windwos和linux,表示不同系统下连接到hbase，默认为linux,可配在settings.xml中 |
-| 2 | krb.ini | krb5文件路径 ,可配在settings.xml中|
-| 3 | core.site.xml | hbase的核心配置文件路径,可配在settings.xml中 |
-| 4 | hbase.site.xml | hbase的核心配置文件路径,可配在settings.xml中 | 
-| 5 | loginUser | 登录用户,例如：ems/h2m2.ecloud.com,可配在settings.xml中 |
-| 6 | keytabPath | keytab公钥文件路径 ,可配在settings.xml中|
+| 1 | cid | conf的上下文对象id,缺省为$h-conf | 
+| 2 | zkQuorum | hbase使用zookeeper的地址,多个逗号间隔,必须 | 
+| 3 | zkParent | zookeeper的父目录,必须 | 
+| 4 | loginUser | 登录用户,例如：ems/h2m2.ecloud.com,可配在settings.xml中 |
+| 5 | keytabPath | keytab公钥文件路径 ,可配在settings.xml中|
+| 6 | krb.ini | krb5文件路径 ,可配在settings.xml中|
+| 7 | core.site.xml | hbase的核心配置文件路径,可配在settings.xml中 ，可选|
+| 8 | hbase.site.xml | hbase的核心配置文件路径,可配在settings.xml中 ，可选| 
 
 linux支持下列参数：
 
-| 1 | callType | 取值为windwos和linux,表示不同系统下连接到hbase，默认为linux ,可配在settings.xml中|
-| 2 | core.site.xml | hbase的核心配置文件路径,可配在settings.xml中 |
-| 3 | hbase.site.xml | hbase的核心配置文件路径,可配在settings.xml中 | 
+| 编号 | 代码 | 说明 |
+| ---- | ---- | ---- |
+| 1 | cid | conf的上下文对象id,缺省为$h-conf | 
+| 2 | zkQuorum | hbase使用zookeeper的地址,多个逗号间隔,必须 | 
+| 3 | zkParent | zookeeper的父目录,必须 | 
+| 4 | loginUser | 登录用户,例如：ems/h2m2.ecloud.com,可配在settings.xml中 |
+| 5 | keytabPath | keytab公钥文件路径 ,可配在settings.xml中|
+
+注意：
+
+1.hbase必要配置文件(core.site.xml、hbase.site.xml等)自行拷贝到自己项目中的resources目录下，会默认加载此文件夹。
+
+2.windows下连接hbase要自行修改hosts文件，对hbase主机ip映射。
+
 
 ### 案例
 
@@ -36,21 +49,18 @@ linux支持下列参数：
 
 ```xml
 	<script>
-	<using xmlTag = "h-conf" module="com.alogic.xscript.hbase.HConf"/>
-	<h-conf >
+	<h-conf zkQuorum="h2a1.ecloud.com,h2m1.ecloud.com,h2m2.ecloud.com" zkParent="/hbase-secure">
 		 <!--下面是对该conf的操作-->
 		
 	</h-conf>
 </script>
 ```
 settings.xml下的案例：
+
 ```xml
 	<settings>
-		<parameter id="callType" value="windows" final="true"/>
 		<parameter id="krb.ini" value="C:\\krb5.ini" final="true"/>
-		<parameter id="core.site.xml" value="C:\\workspace2\\eops-center\\webapp\\eops-center-web\\src\\main\\resources\\conf\\hbase\\test\\core-site.xml" final="true"/>
-		<parameter id="hbase.site.xml" value="C:\\workspace2\\eops-center\\webapp\\eops-center-web\\src\\main\\resources\\conf\\hbase\\test\\hbase-site.xml" final="true"/>
 		<parameter id="loginUser" value="ems/h2m2.ecloud.com" final="true"/>
-		<parameter id="keytabPath" value="C:\\hwg\\ems.app.keytab" final="true"/>
+		<parameter id="keytabPath" value="C:\\ems.app.keytab" final="true"/> 
 </settings>
 ```

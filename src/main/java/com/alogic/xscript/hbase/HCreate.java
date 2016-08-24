@@ -13,6 +13,8 @@ import com.alogic.xscript.ExecuteWatcher;
 import com.alogic.xscript.Logiclet;
 import com.alogic.xscript.LogicletContext;
 import com.anysoft.util.BaseException;
+import com.anysoft.util.Properties;
+import com.anysoft.util.PropertiesConstants;
 
 /**
  * 在hbase中创建表
@@ -22,8 +24,33 @@ import com.anysoft.util.BaseException;
  */
 public class HCreate extends HAdminOperation {
 
+    /**
+     * 列族：多个用逗号间隔
+     */
+    protected String cf = "";
+
+    /**
+     * 表名
+     */
+    protected String tname = "";
+
+    /**
+     * 如果已存在表是否被覆盖，默认不覆盖false，覆盖=true
+     */
+    protected boolean cover = false;
+
     public HCreate(String tag, Logiclet p) {
         super(tag, p);
+    }
+
+    @Override
+    public void configure(Properties p) {
+        super.configure(p);
+
+        cf = PropertiesConstants.getString(p, "cf", cf, true);
+        tname = PropertiesConstants.getString(p, "tname", tname, true);
+        cover = PropertiesConstants.getBoolean(p, "cover", cover, true);
+
     }
 
     @Override
@@ -31,21 +58,23 @@ public class HCreate extends HAdminOperation {
         if (StringUtils.isEmpty(tname)) {
             throw new BaseException("core.no_tname", "It must be in a h-create context,check your script.");
         }
-        if (StringUtils.isEmpty(cfy)) {
-            throw new BaseException("core.no_cfy", "It must be in a h-create context,check your script.");
+        if (StringUtils.isEmpty(cf)) {
+            throw new BaseException("core.no_cf", "It must be in a h-create context,check your script.");
         }
 
         try {
             if (hBaseAdmin.tableExists(tname)) {
-                hBaseAdmin.disableTable(tname);
-                hBaseAdmin.deleteTable(tname);
-                log(String.format("[%s] is exist,detele....", tname), "warn");
-                // throw new BaseException("core.tableExists",
-                // "create table '"+tname+"' exist,check your script.");
+                if (cover) {
+                    hBaseAdmin.disableTable(tname);
+                    hBaseAdmin.deleteTable(tname);
+                    log(String.format("[%s] is exist,detele....", tname), "warn");
+                } else {
+                    throw new BaseException("core.tableExists", "create table '" + tname + "' exist,check your script.");
+                }
             }
             // 新建一个students表的描述
             HTableDescriptor tableDesc = new HTableDescriptor(TableName.valueOf(tname));
-            String[] columnFamilys = cfy.split(",");
+            String[] columnFamilys = cf.split(",");
             // 在描述里添加列族
             for (String columnFamily : columnFamilys) {
                 tableDesc.addFamily(new HColumnDescriptor(columnFamily));

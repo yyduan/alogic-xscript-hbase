@@ -1,16 +1,17 @@
 <?xml version="1.0"?>
 <script>
 	<using xmlTag = "h-conf" module="com.alogic.xscript.hbase.HConf"/>
-	<h-conf >
-		<h-table tname="bbb">
+	<h-conf zkQuorum="h2a1.ecloud.com,h2m1.ecloud.com,h2m2.ecloud.com" zkParent="/hbase-secure">
+		<h-table tname="aaabbb">
 			<!-- <h-scan tag="data"  col="M" srow="hwg" erow="hwi" /> -->
-			<!-- <h-scan tag="data" ftype="AND"  filter="PrefixFilter,hw;SingleColumnValueFilter,M,money,0" /> -->
-			<h-scan tag="data"   filter="RowFilter,SubstringComparator,hw" />
-			<!-- <h-scan tag="data"   filter="SingleColumnValueFilter,M,money,0" /> -->
-			<!-- <h-put row="hwg" col="M:age" value="30" />
-			<h-put row="hwg" col="M:money" value="100" />
-			<h-put row="hwg" col="F:sex" value="man" />
-			<h-put row="wzf" col="M:money" value="50" /> -->
+			 <h-scan tag="data"  >
+			 <filter module="And">
+		       <!--  <filter module="Prefix"  prefix="hw" /> -->
+		        <!-- <filter module="Row" comparator="Substring" value="hw" operator="EQUAL"/> -->
+		        <!-- <filter module="ColumnPrefix" prefix="M" /> -->
+		        <filter module="ColumnValue" family="M" qualifier="money" value="50" operator="EQUAL"/>
+		    </filter>
+			 </h-scan> 
 		</h-table>
 	</h-conf>
 </script>

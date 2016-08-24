@@ -1,8 +1,9 @@
 <?xml version="1.0"?>
 <script>
 	<using xmlTag = "h-conf" module="com.alogic.xscript.hbase.HConf"/>
-	<h-conf id="hbaseConf" >
-		<h-admin id="HBaseAdmin">
+	<!-- <h-conf zkQuorum="h3a1.ecloud.com,h3m1.ecloud.com,h3m2.ecloud.com" zkParent="/hbase-h3"> -->
+	<h-conf zkQuorum="h2a1.ecloud.com,h2m1.ecloud.com,h2m2.ecloud.com" zkParent="/hbase-secure">
+		<h-admin >
 			<h-list tag="data"  />
 		</h-admin>
 	</h-conf>

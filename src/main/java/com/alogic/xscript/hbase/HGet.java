@@ -16,6 +16,7 @@ import org.w3c.dom.Element;
 import com.alogic.xscript.ExecuteWatcher;
 import com.alogic.xscript.Logiclet;
 import com.alogic.xscript.LogicletContext;
+import com.alogic.xscript.hbase.util.FColumnUtil;
 import com.alogic.xscript.hbase.util.FilterBuilder;
 import com.anysoft.util.BaseException;
 import com.anysoft.util.Properties;
@@ -42,6 +43,15 @@ public class HGet extends HTableOperation {
      */
     protected Integer mvers = null;    
 
+    /**
+     * 行名rowkey
+     */
+    protected String row = "";
+    /**
+     * 列名(包含列族:列名)
+     */
+    protected String col = "";
+
     public HGet(String tag, Logiclet p) {
         super(tag, p);
     }
@@ -51,7 +61,9 @@ public class HGet extends HTableOperation {
     	super.configure(p);
         stime = PropertiesConstants.getLong(p, "stime", -1, true);
         etime = PropertiesConstants.getLong(p, "etime", -1, true);        
-        mvers = PropertiesConstants.getInt(p, "version", -1, true);    
+        mvers = PropertiesConstants.getInt(p, "version", -1, true);
+        row = PropertiesConstants.getString(p, "row", row, true);
+        col = PropertiesConstants.getString(p, "col", col, true);
 
         
     }
@@ -78,7 +90,7 @@ public class HGet extends HTableOperation {
             throw new BaseException("core.no_row", "It must be in a h-get context,check your script.");
         }
         Get get = new Get(Bytes.toBytes(row));
-        byte[][] fcBytes = getFamilyAndColumnBytes();
+        byte[][] fcBytes = FColumnUtil.getFamilyAndColumnBytes(col);
         if (fcBytes != null) {
             if (fcBytes[1] != null) {
                 get.addColumn(fcBytes[0], fcBytes[1]);
@@ -124,5 +136,6 @@ public class HGet extends HTableOperation {
             throw new BaseException("core.hbase_get_error", e.getMessage());
         }
     }
+
 
 }

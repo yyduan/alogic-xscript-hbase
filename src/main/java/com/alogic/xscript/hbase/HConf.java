@@ -27,11 +27,35 @@ import com.anysoft.util.PropertiesConstants;
 public class HConf extends Segment {
     protected String cid = "$h-conf";
 
+    /**
+     * hbase使用zookeeper的地址,多个逗号间隔
+     */
+    protected String hbaseZookeeperQuorum = null;
+
+    /**
+     * zookeeper的父目录
+     */
+    protected String zookeeperZnodeParent = null;
+
+    /**
+     * krb文件
+     */
     protected String krb = null;
+
+    /**
+     * 什么系统标识
+     */
     protected String callType = "linux";
+
     protected String core_site_xml = null;
     protected String hbase_site_xml = null;
+    /**
+     * 登录用户
+     */
     protected String loginUser = null;
+    /**
+     * keytab文件
+     */
     protected String keytabPath = null;
 
     public HConf(String tag, Logiclet p) {
@@ -59,20 +83,22 @@ public class HConf extends Segment {
         hbase_site_xml = PropertiesConstants.getString(p, "hbase.site.xml", hbase_site_xml);
         loginUser = PropertiesConstants.getString(p, "loginUser", loginUser);
         keytabPath = PropertiesConstants.getString(p, "keytabPath", keytabPath);
+        hbaseZookeeperQuorum = PropertiesConstants.getString(p, "zkQuorum", hbaseZookeeperQuorum, true);
+        zookeeperZnodeParent = PropertiesConstants.getString(p, "zkParent", zookeeperZnodeParent, true);
     }
 
     @Override
     protected void onExecute(Map<String, Object> root, Map<String, Object> current, LogicletContext ctx, ExecuteWatcher watcher) {
-        // 此处获取Configuration的方式待优化
-
+        String callType = System.getProperty("os.name");
         // 1.加入krb5.ini文件，用于window请求
-        if ("windows".equals(callType)) {
+        if (callType.indexOf("Windows") > -1) {
             if (krb == null) {
                 throw new BaseException("core.no_krb", "windows must has krb.int file,check your script.");
             }
             System.setProperty("javax.xml.parsers.DocumentBuilderFactory", "com.sun.org.apache.xerces.internal.jaxp.DocumentBuilderFactoryImpl");
             System.setProperty("java.security.krb5.conf", krb);
         }
+        // 此处获取Configuration的方式待优化
         Configuration conf = HBaseConfiguration.create();
         // 载入core-size.xml和hbase-site.xml必要文件
         try {
@@ -90,6 +116,23 @@ public class HConf extends Segment {
             log(String.format("Can not find the file[%s]", hbase_site_xml), "error");
         }
 
+        // 不同hbase集群下不同配置zookeeper
+        if (hbaseZookeeperQuorum != null) {
+            conf.set("hbase.zookeeper.quorum", hbaseZookeeperQuorum);
+        }
+        if (zookeeperZnodeParent != null) {
+            conf.set("zookeeper.znode.parent", zookeeperZnodeParent);
+        }
+
+        // loginUser = "ems/h2m2.ecloud.com";
+        // keytabPath = "C:\\ems.app.keytab";
+        // Iterator<Entry<String, String>> iter = conf.iterator();
+        // Entry<String, String> entry;
+        // while (iter.hasNext()) {
+        // entry = iter.next();
+        // System.err.println("====" + entry.getKey() + "=" + entry.getValue());
+        // }
+        // System.err.println("====:" + JSON.toString(conf));
         UserGroupInformation.setConfiguration(conf);
         // 3.window下，采用loginUserFromKeytab登录，需要user和keytab
         if (loginUser != null && keytabPath != null) {
@@ -100,30 +143,6 @@ public class HConf extends Segment {
                 log("loginUserFromKeytab fail,e:" + e.toString(), "error");
             }
         }
-        // System.err.println("===================conf:" + conf);
-        // HTable table;
-        // try {
-        // table = new HTable(conf, "ems:archive_data");
-        // Scan scan = new Scan();
-        // ResultScanner results;
-        // results = table.getScanner(scan);
-        // for (Result result : results) {
-        // for (Cell cell : result.rawCells()) {
-        // System.err.println("RowName:" + new String(CellUtil.cloneRow(cell)) +
-        // " ");
-        // System.err.println("Timetamp:" + cell.getTimestamp() + " ");
-        // System.err.println("column Family:" + new
-        // String(CellUtil.cloneFamily(cell)) + " ");
-        // System.err.println("row Name:" + new
-        // String(CellUtil.cloneQualifier(cell)) + " ");
-        // System.err.println("value:" + new String(CellUtil.cloneValue(cell)) +
-        // " ");
-        // }
-        // }
-        // } catch (IOException e) {
-        // // TODO Auto-generated catch block
-        // e.printStackTrace();
-        // }
         try {
             ctx.setObject(cid, conf);
             super.onExecute(root, current, ctx, watcher);
