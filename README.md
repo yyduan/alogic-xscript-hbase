@@ -23,16 +23,16 @@ alogic-xscript-hbase是基于xscript2.0的hbase插件，提供了使用hbase所�
 ### 如何开始？
 
 windwos下操作：
-1.修改hosts文件，对hbase主机ip映射。
-2.在settings.xml配置krb5.ini文件路径。
-3.采用loginUserFromKeytab登录，需要user和keytab,配置在settings.xml
-4.hbase必要配置文件(core.site.xml、hbase.site.xml等)自行拷贝到自己项目中的resources目录下，会默认加载此文件夹。
+1. 修改hosts文件，对hbase主机ip映射。
+2. 在settings.xml配置krb5.ini文件路径。
+3. 采用loginUserFromKeytab登录，需要user和keytab,配置在settings.xml
+4. hbase必要配置文件(core.site.xml、hbase.site.xml等)自行拷贝到自己项目中的resources目录下，会默认加载此文件夹。
 
 linux下操作：
-1.采用loginUserFromKeytab登录，需要user和keytab,配置在settings.xml
-2.hbase必要配置文件(core.site.xml、hbase.site.xml等)自行拷贝到自己项目中的resources目录下，会默认加载此文件夹。
+1. 采用loginUserFromKeytab登录，需要user和keytab,配置在settings.xml
+2. hbase必要配置文件(core.site.xml、hbase.site.xml等)自行拷贝到自己项目中的resources目录下，会默认加载此文件夹。
 
-之后，可以运行demo来测试xscript脚本。
+之后，可以运行[demo](src/test/java/Demo.java)来测试xscript脚本。
 
 settings.xml下的案例：
 
