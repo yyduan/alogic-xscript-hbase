@@ -56,13 +56,13 @@ windwos下操作：
    ```
 3. 采用loginUserFromKeytab登录配置时，需要你在132.122.1.13主机/etc/security/keytabs下拷贝自己需要的用户keytab文件，demo的[keytab文件](src/test/resources/conf/ems.app.keytab)。
 
-4. hbase必要配置文件([core.site.xml](src/test/resources/conf/core.site.xml)、[hbase.site.xml](src/test/resources/conf/core.site.xml)等)自行拷贝到自己项目中的resources目录下，会默认加载此文件夹。
+4. hbase必要配置文件([core-site.xml](src/test/resources/conf/core-site.xml)、[hbase-site.xml](src/test/resources/conf/hbase-site.xml)等)自行拷贝到自己项目中的resources目录下，会默认加载此文件夹。
 
 linux下操作：
 
 1. linux下也可以采用默认conf.create()配置，如果采用loginUserFromKeytab登录配置时，需要你在132.122.1.13主机/etc/security/keytabs下拷贝自己需要的用户keytab文件，demo的[keytab文件](src/test/resources/conf/ems.app.keytab)。
 
-2. hbase必要配置文件([core.site.xml](src/test/resources/conf/core.site.xml)、[hbase.site.xml](src/test/resources/conf/core.site.xml)等)自行拷贝到自己项目中的resources目录下，会默认加载此文件夹。
+2. hbase必要配置文件([core-site.xml](src/test/resources/conf/core-site.xml)、[hbase-site.xml](src/test/resources/conf/hbase-site.xml)等)自行拷贝到自己项目中的resources目录下，会默认加载此文件夹。
 
 之后，可以运行[demo](src/test/java/Demo.java)来测试xscript脚本。
 
