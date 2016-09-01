@@ -2,11 +2,14 @@
 <script>
 	<using xmlTag = "h-conf" module="com.alogic.xscript.hbase.HConf"/>
 	<!-- <h-conf zkQuorum="h3a1.ecloud.com,h3m1.ecloud.com,h3m2.ecloud.com" zkParent="/hbase-h3"> -->
-	<h-conf zkQuorum="h2a1.ecloud.com,h2m1.ecloud.com,h2m2.ecloud.com" zkParent="/hbase-secure">
+	<h-conf>
+		<h-conf-set id="hbase.zookeeper.quorum" value="h2a1.ecloud.com,h2m1.ecloud.com,h2m2.ecloud.com" />
+		<h-conf-set id="zookeeper.znode.parent" value="/hbase-secure" />
+		<h-conf-user path="C:\\ems.app.keytab" user="ems/h2m2.ecloud.com" />
 		<h-table tname="aaabbb">
-			<h-put row="hwg" col="team" value="{'aaa':'1'}" />
+			<h-put row="hwg" col="team" value="group1" />
 			<h-put row="hwg" col="M:age" value="30" />
-			<h-put row="hwg" col="M:money" value="100" />
+			<h-put row="hwg" col="M:money" value="50" />
 			<h-put row="hwg" col="F:sex" value="man" />
 			<h-put row="hwk" col="F:sex" value="girl" />
 			<h-put row="wzf" col="M:money" value="50" />

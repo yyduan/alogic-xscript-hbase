@@ -1,14 +1,9 @@
 package com.alogic.xscript.hbase;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.Map;
 
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hbase.HBaseConfiguration;
-import org.apache.hadoop.security.UserGroupInformation;
 
 import com.alogic.xscript.ExecuteWatcher;
 import com.alogic.xscript.Logiclet;
@@ -28,39 +23,18 @@ public class HConf extends Segment {
     protected String cid = "$h-conf";
 
     /**
-     * hbase使用zookeeper的地址,多个逗号间隔
-     */
-    protected String hbaseZookeeperQuorum = null;
-
-    /**
-     * zookeeper的父目录
-     */
-    protected String zookeeperZnodeParent = null;
-
-    /**
      * krb文件
      */
     protected String krb = null;
 
-    /**
-     * 什么系统标识
-     */
-    protected String callType = "linux";
-
-    protected String core_site_xml = null;
-    protected String hbase_site_xml = null;
-    /**
-     * 登录用户
-     */
-    protected String loginUser = null;
-    /**
-     * keytab文件
-     */
-    protected String keytabPath = null;
+    // protected String core_site_xml = null;
+    // protected String hbase_site_xml = null;
 
     public HConf(String tag, Logiclet p) {
         super(tag, p);
 
+        registerModule("h-conf-set", HConfSet.class);
+        registerModule("h-conf-user", HConfUser.class);
         registerModule("h-admin", HAdmin.class);
         registerModule("h-table", HBaseTable.class);
         registerModule("h-create", HCreate.class);
@@ -78,13 +52,10 @@ public class HConf extends Segment {
 
         cid = PropertiesConstants.getString(p, "cid", cid);
         krb = PropertiesConstants.getString(p, "krb.ini", krb);
-        core_site_xml = PropertiesConstants.getString(p, "core.site.xml", core_site_xml);
-        callType = PropertiesConstants.getString(p, "callType", callType);
-        hbase_site_xml = PropertiesConstants.getString(p, "hbase.site.xml", hbase_site_xml);
-        loginUser = PropertiesConstants.getString(p, "loginUser", loginUser);
-        keytabPath = PropertiesConstants.getString(p, "keytabPath", keytabPath);
-        hbaseZookeeperQuorum = PropertiesConstants.getString(p, "zkQuorum", hbaseZookeeperQuorum, true);
-        zookeeperZnodeParent = PropertiesConstants.getString(p, "zkParent", zookeeperZnodeParent, true);
+        // core_site_xml = PropertiesConstants.getString(p, "core.site.xml",
+        // core_site_xml);
+        // hbase_site_xml = PropertiesConstants.getString(p, "hbase.site.xml",
+        // hbase_site_xml);
     }
 
     @Override
@@ -101,28 +72,30 @@ public class HConf extends Segment {
         // 此处获取Configuration的方式待优化
         Configuration conf = HBaseConfiguration.create();
         // 载入core-size.xml和hbase-site.xml必要文件
-        try {
-            if (core_site_xml != null) {
-                conf.addResource(new FileInputStream(new File(core_site_xml)));
-            }
-        } catch (FileNotFoundException e) {
-            log(String.format("Can not find the file[%s]", core_site_xml), "error");
-        }
-        try {
-            if (hbase_site_xml != null) {
-                conf.addResource(new FileInputStream(new File(hbase_site_xml)));
-            }
-        } catch (FileNotFoundException e) {
-            log(String.format("Can not find the file[%s]", hbase_site_xml), "error");
-        }
+        // try {
+        // if (core_site_xml != null) {
+        // conf.addResource(new FileInputStream(new File(core_site_xml)));
+        // }
+        // } catch (FileNotFoundException e) {
+        // log(String.format("Can not find the file[%s]", core_site_xml),
+        // "error");
+        // }
+        // try {
+        // if (hbase_site_xml != null) {
+        // conf.addResource(new FileInputStream(new File(hbase_site_xml)));
+        // }
+        // } catch (FileNotFoundException e) {
+        // log(String.format("Can not find the file[%s]", hbase_site_xml),
+        // "error");
+        // }
 
-        // 不同hbase集群下不同配置zookeeper
-        if (hbaseZookeeperQuorum != null) {
-            conf.set("hbase.zookeeper.quorum", hbaseZookeeperQuorum);
-        }
-        if (zookeeperZnodeParent != null) {
-            conf.set("zookeeper.znode.parent", zookeeperZnodeParent);
-        }
+        // // 不同hbase集群下不同配置zookeeper
+        // if (hbaseZookeeperQuorum != null) {
+        // conf.set("hbase.zookeeper.quorum", hbaseZookeeperQuorum);
+        // }
+        // if (zookeeperZnodeParent != null) {
+        // conf.set("zookeeper.znode.parent", zookeeperZnodeParent);
+        // }
 
         // loginUser = "ems/h2m2.ecloud.com";
         // keytabPath = "C:\\ems.app.keytab";
@@ -133,16 +106,16 @@ public class HConf extends Segment {
         // System.err.println("====" + entry.getKey() + "=" + entry.getValue());
         // }
         // System.err.println("====:" + JSON.toString(conf));
-        UserGroupInformation.setConfiguration(conf);
-        // 3.window下，采用loginUserFromKeytab登录，需要user和keytab
-        if (loginUser != null && keytabPath != null) {
-            try {
-                UserGroupInformation.loginUserFromKeytab(loginUser, keytabPath);
-            } catch (IOException e) {
-                // e.printStackTrace();
-                log("loginUserFromKeytab fail,e:" + e.toString(), "error");
-            }
-        }
+        // UserGroupInformation.setConfiguration(conf);
+        // // 3.window下，采用loginUserFromKeytab登录，需要user和keytab
+        // if (loginUser != null && keytabPath != null) {
+        // try {
+        // UserGroupInformation.loginUserFromKeytab(loginUser, keytabPath);
+        // } catch (IOException e) {
+        // // e.printStackTrace();
+        // log("loginUserFromKeytab fail,e:" + e.toString(), "error");
+        // }
+        // }
         try {
             ctx.setObject(cid, conf);
             super.onExecute(root, current, ctx, watcher);

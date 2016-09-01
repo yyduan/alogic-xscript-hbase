@@ -152,24 +152,7 @@
     
     <property>
       <name>hadoop.security.auth_to_local</name>
-      <value>RULE:[1:$1@$0](ambari-qa@ECLOUD.COM)s/.*/ambari-qa/
-RULE:[1:$1@$0](hbase@ECLOUD.COM)s/.*/hbase/
-RULE:[1:$1@$0](hdfs@ECLOUD.COM)s/.*/hdfs/
-RULE:[1:$1@$0](spark@ECLOUD.COM)s/.*/spark/
-RULE:[1:$1@$0](.*@ECLOUD.COM)s/@.*//
-RULE:[2:$1@$0](amshbase@ECLOUD.COM)s/.*/ams/
-RULE:[2:$1@$0](amszk@ECLOUD.COM)s/.*/ams/
-RULE:[2:$1@$0](dn@ECLOUD.COM)s/.*/hdfs/
-RULE:[2:$1@$0](hbase@ECLOUD.COM)s/.*/hbase/
-RULE:[2:$1@$0](hive@ECLOUD.COM)s/.*/hive/
-RULE:[2:$1@$0](jhs@ECLOUD.COM)s/.*/mapred/
-RULE:[2:$1@$0](jn@ECLOUD.COM)s/.*/hdfs/
-RULE:[2:$1@$0](nm@ECLOUD.COM)s/.*/yarn/
-RULE:[2:$1@$0](nn@ECLOUD.COM)s/.*/hdfs/
-RULE:[2:$1@$0](oozie@ECLOUD.COM)s/.*/oozie/
-RULE:[2:$1@$0](rm@ECLOUD.COM)s/.*/yarn/
-RULE:[2:$1@$0](yarn@ECLOUD.COM)s/.*/yarn/
-DEFAULT</value>
+      <value></value>
     </property>
     
     <property>

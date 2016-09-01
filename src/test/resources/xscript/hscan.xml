@@ -1,7 +1,10 @@
 <?xml version="1.0"?>
 <script>
 	<using xmlTag = "h-conf" module="com.alogic.xscript.hbase.HConf"/>
-	<h-conf zkQuorum="h2a1.ecloud.com,h2m1.ecloud.com,h2m2.ecloud.com" zkParent="/hbase-secure">
+	<h-conf> 
+		<h-conf-set id="hbase.zookeeper.quorum" value="h2a1.ecloud.com,h2m1.ecloud.com,h2m2.ecloud.com" />
+		<h-conf-set id="zookeeper.znode.parent" value="/hbase-secure" />
+		<h-conf-user path="C:\\ems.app.keytab" user="ems/h2m2.ecloud.com" />
 		<h-table tname="aaabbb">
 			<!-- <h-scan tag="data"  col="M" srow="hwg" erow="hwi" /> -->
 			 <h-scan tag="data"  >
