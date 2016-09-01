@@ -28,7 +28,10 @@ com.alogic.xscript.hbase.HPut
 ```xml
 <script>
 	<using xmlTag = "h-conf" module="com.alogic.xscript.hbase.HConf"/>
-	<h-conf >
+	<h-conf> 
+		<h-conf-set id="hbase.zookeeper.quorum" value="h2a1.ecloud.com,h2m1.ecloud.com,h2m2.ecloud.com" />
+		<h-conf-set id="zookeeper.znode.parent" value="/hbase-secure" />
+		<h-conf-user path="C:\\ems.app.keytab" user="ems/h2m2.ecloud.com" />
 		<h-table tname="bbb">
 			<h-get row="hwg" col="team" value="team1" />
 			<h-put row="hwg" col="M:age" value="30" />

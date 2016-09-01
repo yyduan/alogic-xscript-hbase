@@ -26,7 +26,7 @@ com.alogic.xscript.hbase.HCreate
 
 ```xml
 	<script>
-	<h-conf zkQuorum="h2a1.ecloud.com,h2m1.ecloud.com,h2m2.ecloud.com" zkParent="/hbase-secure">
+	<h-conf>
 	<h-conf >
 		<h-admin >
 			<h-create tname="bbb" cf="M,F,team" cover="true"  />

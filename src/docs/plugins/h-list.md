@@ -25,7 +25,7 @@ com.alogic.xscript.hbase.HList
 ```xml
 	<script>
 	<using xmlTag = "h-conf" module="com.alogic.xscript.hbase.HConf"/>
-	<h-conf id="hbaseConf" >
+	<h-conf >
 		<h-admin id="HBaseAdmin">
 			<h-list tag="data"  />
 		</h-admin>
