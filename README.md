@@ -7,7 +7,7 @@ alogic-xscript-hbase是基于xscript2.0的hbase插件，提供了使用hbase所�
 
 ### Getting started
 
-按照以下步骤，您可轻松在您的项目中使用alogic-xscript-kvalue.
+按照以下步骤，您可轻松在您的项目中使用alogic-xscript-hbase.
 
 不过开始之前，我们希望您了解xscript的相关知识。
 
