@@ -28,7 +28,7 @@ com.alogic.xscript.hbase.HConfSet
 
 ```xml
 	<script>
-	<using xmlTag = "kv-conf" module="com.alogic.xscript.hbase.HConf"/>
+	<using xmlTag = "h-conf" module="com.alogic.xscript.hbase.HConf"/>
 	<h-conf >
 		<h-conf-set id="hbase.zookeeper.quorum" value="h2a1.ecloud.com,h2m1.ecloud.com,h2m2.ecloud.com" />
 		<h-conf-set id="zookeeper.znode.parent" value="/hbase-secure" />

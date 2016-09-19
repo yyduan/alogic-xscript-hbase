@@ -27,7 +27,7 @@ com.alogic.xscript.hbase.HConfUser
 
 ```xml
 	<script>
-	<using xmlTag = "kv-conf" module="com.alogic.xscript.hbase.HConf"/>
+	<using xmlTag = "h-conf" module="com.alogic.xscript.hbase.HConf"/>
 	<h-conf >
 		<h-conf-user path="C:\\ems.app.keytab" user="ems/h2m2.ecloud.com" />
 	</h-conf>
