@@ -35,25 +35,25 @@ public class HScan extends HTableOperation {
     /**
      * 指定查询rowkey的开始点
      */
-    protected String srow = null;
+    protected String srow = "-1";
     /**
      * 指定查询rowkey的结束点
      */
-    protected String erow = null;
+    protected String erow = "-1";
 
     /**
      * 指定查询开始时间戳
      */
-    protected Long stime = null;
+    protected String stime = "-1";
     /**
      * 指定查询结束时间戳
      */
-    protected Long etime = null;
+    protected String etime = "-1";
 
     /**
      * 列出的版本最大数
      */
-    protected Integer mvers = null;
+    protected String mvers = "-1";
 
     /**
      * 列名(包含列族:列名)
@@ -83,17 +83,30 @@ public class HScan extends HTableOperation {
     @Override
     public void configure(Properties p) {
         super.configure(p);
-        srow = PropertiesConstants.getString(p, "srow", srow, true);
-        erow = PropertiesConstants.getString(p, "erow", erow, true);
-        stime = PropertiesConstants.getLong(p, "stime", -1, true);
-        etime = PropertiesConstants.getLong(p, "etime", -1, true);
-        mvers = PropertiesConstants.getInt(p, "version", -1, true);
-        col = PropertiesConstants.getString(p, "col", col, true);
+        //srow = PropertiesConstants.getString(p, "srow", srow, true);
+        //erow = PropertiesConstants.getString(p, "erow", erow, true);
+        srow = p.GetValue("srow", srow, false, true);
+        erow = p.GetValue("erow", erow, false, true);
+        
+        //stime = PropertiesConstants.getLong(p, "stime", -1, true);
+        //etime = PropertiesConstants.getLong(p, "etime", -1, true);
+        //mvers = PropertiesConstants.getInt(p, "version", -1, true);
+        //col = PropertiesConstants.getString(p, "col", col, true);
+        stime = p.GetValue("stime", stime, false, true);
+        stime = p.GetValue("stime", stime, false, true);
+        mvers = p.GetValue("mvers", mvers, false, true);
+        col = p.GetValue("col", col, false, true);
     }
 
     @Override
     protected void onExecute(HTable hTable, Map<String, Object> root, Map<String, Object> current, LogicletContext ctx, ExecuteWatcher watcher) {
         Scan scan = new Scan();
+        srow = ctx.transform(srow);
+        erow = ctx.transform(erow);
+    	Long startTime = Long.parseLong(ctx.transform(stime));
+    	Long endTime = Long.parseLong(ctx.transform(etime));
+    	int mversion = Integer.parseInt(ctx.transform(mvers));
+        col = ctx.transform(col);
         byte[][] fcBytes = FColumnUtil.getFamilyAndColumnBytes(col);
         if (fcBytes != null) {
             if (fcBytes[1] != null) {
@@ -112,11 +125,11 @@ public class HScan extends HTableOperation {
                 if (StringUtils.isNotEmpty(erow)) {
                     scan.setStopRow(Bytes.toBytes(erow));
                 }
-                if (stime >= 0 && etime >= 0) {
-                    scan.setTimeRange(stime, etime);
+                if (startTime >= 0 && endTime >= 0) {
+                    scan.setTimeRange(startTime, endTime);
                 }
-                if (mvers >= 0) {
-                    scan.setMaxVersions(mvers);
+                if (mversion >= 0) {
+                    scan.setMaxVersions(mversion);
                 }
                 if (fb != null) {
                     Filter f = fb.getFilter(ctx);

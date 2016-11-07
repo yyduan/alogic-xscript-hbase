@@ -40,12 +40,18 @@ public class HDelete extends HTableOperation {
     @Override
     public void configure(Properties p) {
         super.configure(p);
-        row = PropertiesConstants.getString(p, "row", row, true);
-        col = PropertiesConstants.getString(p, "col", col, true);
+        //row = PropertiesConstants.getString(p, "row", row, true);
+        //col = PropertiesConstants.getString(p, "col", col, true);
+        row = p.GetValue("row", row, false, true);
+        col = p.GetValue("col", col, false, true);
     }
 
     @Override
     protected void onExecute(HTable hTable, Map<String, Object> root, Map<String, Object> current, LogicletContext ctx, ExecuteWatcher watcher) {
+    	
+        row = ctx.transform(row);
+        col = ctx.transform(col);
+        
         if (StringUtils.isEmpty(row)) {
             throw new BaseException("core.no_row", "It must be in a h-delete context,check your script.");
         }

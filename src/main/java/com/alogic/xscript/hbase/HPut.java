@@ -40,9 +40,12 @@ public class HPut extends HTableOperation {
     @Override
     public void configure(Properties p) {
         super.configure(p);
-        row = PropertiesConstants.getString(p, "row", row, true);
-        col = PropertiesConstants.getString(p, "col", col, true);
-        value = PropertiesConstants.getString(p, "value", value, true);
+        //row = PropertiesConstants.getString(p, "row", row, true);
+        //col = PropertiesConstants.getString(p, "col", col, true);
+        //value = PropertiesConstants.getString(p, "value", value, true);
+        row = p.GetValue("row", row, false, true);
+        col = p.GetValue("col", col, false, true);
+        value = p.GetValue("value", value, false, true);
     }
 
     @Override
@@ -54,8 +57,14 @@ public class HPut extends HTableOperation {
             throw new BaseException("core.no_col", "It must be in a h-put context,check your script.");
         }
         if (StringUtils.isEmpty(value)) {
-            throw new BaseException("core.no_col_value", "It must be in a h-put context,check your script.");
+            throw new 
+            
+            BaseException("core.no_col_value", "It must be in a h-put context,check your script.");
         }
+        
+        row = ctx.transform(row);
+        col = ctx.transform(col);
+        value = ctx.transform(value);
         // Put
         // 类的add()方法用于插入数据。它需要表示列族，列限定符（列名称）3字节阵列，并要插入的值。将数据插入HBase表使用add()方法
         Put p = new Put(Bytes.toBytes(row));

@@ -37,7 +37,7 @@ public class HCreate extends HAdminOperation {
     /**
      * 如果已存在表是否被覆盖，默认不覆盖false，覆盖=true
      */
-    protected boolean cover = false;
+    protected String cover = "false";
 
     public HCreate(String tag, Logiclet p) {
         super(tag, p);
@@ -47,24 +47,31 @@ public class HCreate extends HAdminOperation {
     public void configure(Properties p) {
         super.configure(p);
 
-        cf = PropertiesConstants.getString(p, "cf", cf, true);
-        tname = PropertiesConstants.getString(p, "tname", tname, true);
-        cover = PropertiesConstants.getBoolean(p, "cover", cover, true);
+        //cf = PropertiesConstants.getString(p, "cf", cf, true);
+        cf = p.GetValue("cf", cf, false, true);
+        //tname = PropertiesConstants.getString(p, "tname", tname, true);
+        tname = p.GetValue("tname", tname, false, true);
+        //cover = PropertiesConstants.getBoolean(p, "cover", cover, true);
+        cover = p.GetValue("cover", cover, false, true);
 
     }
 
     @Override
     protected void onExecute(HBaseAdmin hBaseAdmin, Map<String, Object> root, Map<String, Object> current, LogicletContext ctx, ExecuteWatcher watcher) {
+    	System.out.println(tname);
         if (StringUtils.isEmpty(tname)) {
             throw new BaseException("core.no_tname", "It must be in a h-create context,check your script.");
         }
         if (StringUtils.isEmpty(cf)) {
             throw new BaseException("core.no_cf", "It must be in a h-create context,check your script.");
         }
+        tname = ctx.transform(tname);
+        cf = ctx.transform(cf);
+        System.out.println(tname);
 
         try {
             if (hBaseAdmin.tableExists(tname)) {
-                if (cover) {
+                if (Boolean.parseBoolean(ctx.transform(cover))) {
                     hBaseAdmin.disableTable(tname);
                     hBaseAdmin.deleteTable(tname);
                     log(String.format("[%s] is exist,detele....", tname), "warn");
@@ -81,6 +88,7 @@ public class HCreate extends HAdminOperation {
             }
             // 根据配置好的描述建表
             hBaseAdmin.createTable(tableDesc);
+            System.out.println(cf);
             log(String.format("create [%s] success!", tname), "info");
         } catch (IOException e) {
             // TODO Auto-generated catch block

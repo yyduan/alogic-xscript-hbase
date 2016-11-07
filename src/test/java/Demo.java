@@ -37,12 +37,12 @@ public class Demo {
 		settings.addSettings(new CommandLine(args));		
 		settings.addSettings("java:///conf/settings.xml#Demo", null, Settings.getResourceFactory());
 		
-		run("java:///xscript/Helloworld.xml#Demo",settings);
+//		run("java:///xscript/Helloworld.xml#Demo",settings);
         run("java:///xscript/hcreate.xml#Demo", settings);
         // run("java:///xscript/hdrop.xml#Demo", settings);
         run("java:///xscript/hput.xml#Demo", settings);
         // run("java:///xscript/hlist.xml#Demo", settings);
-        // run("java:///xscript/hget.xml#Demo", settings);
+        run("java:///xscript/hget.xml#Demo", settings);
         // run("java:///xscript/hdelete.xml#Demo", settings);
         run("java:///xscript/hscan.xml#Demo", settings);
 	}

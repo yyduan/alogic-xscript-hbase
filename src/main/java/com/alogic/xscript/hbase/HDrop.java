@@ -34,12 +34,13 @@ public class HDrop extends HAdminOperation {
     public void configure(Properties p) {
         super.configure(p);
 
-        tname = PropertiesConstants.getString(p, "tname", tname, true);
-
+        //tname = PropertiesConstants.getString(p, "tname", tname, true);
+        tname = p.GetValue("tname", tname, false, true);
     }
 
     @Override
     protected void onExecute(HBaseAdmin hBaseAdmin, Map<String, Object> root, Map<String, Object> current, LogicletContext ctx, ExecuteWatcher watcher) {
+    	tname = ctx.transform(tname);
         if (StringUtils.isEmpty(tname)) {
             throw new BaseException("core.no_tname", "It must be in a h-drop context,check your script.");
         }
@@ -50,6 +51,7 @@ public class HDrop extends HAdminOperation {
             // 第3步
             // 现在使用HBaseAdmin类的deleteTable()方法删除表。
             hBaseAdmin.deleteTable(tname);
+            System.out.println("drop success");
             log(String.format("drop [%s] success!", tname), "info");
         } catch (IOException e) {
             // TODO Auto-generated catch block

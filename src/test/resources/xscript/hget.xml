@@ -1,9 +1,15 @@
 <?xml version="1.0"?>
 <script>
 	<using xmlTag = "h-conf" module="com.alogic.xscript.hbase.HConf"/>
+	
+	<checkAndSet id="htable" dft="aaabbb"/>
+	
 	<h-conf >
-		<h-table tname="aaabbb">
-			<h-get tag="data" row="hwg" />
+		<h-conf-set id="hbase.zookeeper.quorum" value="h2a1.ecloud.com,h2m1.ecloud.com,h2m2.ecloud.com" />
+		<h-conf-set id="zookeeper.znode.parent" value="/hbase-secure" />
+		<h-conf-user path="C:\\ems.app.keytab" user="ems/h2m2.ecloud.com" />
+		<h-table tname="${htable}">
+			<h-get tag="data" row="hwg"/>
 			<!-- <h-put row="hwg" col="M:age" value="30" />
 			<h-put row="hwg" col="M:money" value="100" />
 			<h-put row="hwg" col="F:sex" value="man" />

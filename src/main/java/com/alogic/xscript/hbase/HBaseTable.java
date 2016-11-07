@@ -38,7 +38,9 @@ public class HBaseTable extends Segment {
 
         cid = PropertiesConstants.getString(p, "cid", cid, true);
         pid = PropertiesConstants.getString(p, "pid", pid, true);
-        tname = PropertiesConstants.getString(p, "tname", tname, true);
+        //tname = PropertiesConstants.getString(p, "tname", tname, true);
+        tname = p.GetValue("tname", tname, false, true);
+        System.out.println("hello"+tname);
     }
 
     @Override
@@ -49,7 +51,7 @@ public class HBaseTable extends Segment {
             throw new BaseException("core.no_conf", "It must be in a h-conf context,check your script.");
         }
         try {
-            String tableName = ctx.transform(tname);
+            String tableName = ctx.transform(tname); 
             if (StringUtils.isNotEmpty(tname)) {
                 HTable t = new HTable(conf, tableName);
                 ctx.setObject(cid, t);

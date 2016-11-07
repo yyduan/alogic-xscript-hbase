@@ -1,20 +1,24 @@
 <?xml version="1.0"?>
 <script>
 	<using xmlTag = "h-conf" module="com.alogic.xscript.hbase.HConf"/>
+	
+	<checkAndSet id="htable" dft="aaabbb"/>
+	<checkAndSet id="hsrow" dft="hwg"/>
+	<checkAndSet id="herow" dft="hwi"/>
 	<h-conf> 
 		<h-conf-set id="hbase.zookeeper.quorum" value="h2a1.ecloud.com,h2m1.ecloud.com,h2m2.ecloud.com" />
 		<h-conf-set id="zookeeper.znode.parent" value="/hbase-secure" />
 		<h-conf-user path="C:\\ems.app.keytab" user="ems/h2m2.ecloud.com" />
 		<h-table tname="aaabbb">
-			<!-- <h-scan tag="data"  col="M" srow="hwg" erow="hwi" /> -->
-			 <h-scan tag="data"  >
-			 <filter module="And">
+			 <h-scan tag="data"  col="M" srow="${hsrow}" erow="${herow}" /> 
+			 <!--  <h-scan tag="data"  >
+			 <filter module="And">-->
 		       <!--  <filter module="Prefix"  prefix="hw" /> -->
 		        <!-- <filter module="Row" comparator="Substring" value="hw" operator="EQUAL"/> -->
 		        <!-- <filter module="ColumnPrefix" prefix="M" /> -->
-		        <filter module="ColumnValue" family="M" qualifier="money" value="50" operator="EQUAL"/>
+		      <!--  <filter module="ColumnValue" family="M" qualifier="money" value="50" operator="EQUAL"/>
 		    </filter>
-			 </h-scan> 
+			 </h-scan> -->
 		</h-table>
 	</h-conf>
 </script>

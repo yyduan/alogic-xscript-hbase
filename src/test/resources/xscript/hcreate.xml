@@ -1,12 +1,16 @@
 <?xml version="1.0"?>
 <script>
 	<using xmlTag = "h-conf" module="com.alogic.xscript.hbase.HConf"/>
+	<checkAndSet id="htable" dft="aaabbb"/> 
+	<checkAndSet id="hcf" dft="M,F,team" />
+	<checkAndSet id="hcover" dft="true"/>
+
 	<h-conf >
 		<h-conf-set id="hbase.zookeeper.quorum" value="h2a1.ecloud.com,h2m1.ecloud.com,h2m2.ecloud.com" />
 		<h-conf-set id="zookeeper.znode.parent" value="/hbase-secure" />
 		<h-conf-user path="C:\\ems.app.keytab" user="ems/h2m2.ecloud.com" />
 		<h-admin >
-			<h-create tname="aaabbb" cf="M,F,team" cover="true"  />
+			<h-create tname="${htable}" cf="${hcf}" cover="${hcover}"  />
 		</h-admin>
 	</h-conf>
 </script>
