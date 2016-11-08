@@ -1,7 +1,9 @@
 package com.alogic.xscript.hbase;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
@@ -20,7 +22,6 @@ import com.alogic.xscript.hbase.util.FColumnUtil;
 import com.alogic.xscript.hbase.util.FilterBuilder;
 import com.anysoft.util.BaseException;
 import com.anysoft.util.Properties;
-import com.anysoft.util.PropertiesConstants;
 import com.anysoft.util.XmlElementProperties;
 import com.anysoft.util.XmlTools;
 
@@ -36,12 +37,12 @@ public class HGet extends HTableOperation {
     /**
      * 指定查询结束时间戳
      */
-    protected String etime = "-1";    
+    protected String etime = "-1";
     
     /**
      * 列出的版本最大数
      */
-    protected String mvers = "-1";    
+    protected String mvers = "-1";
 
     /**
      * 行名rowkey
@@ -59,15 +60,14 @@ public class HGet extends HTableOperation {
     @Override
     public void configure(Properties p){
     	super.configure(p);
-        //stime = PropertiesConstants.getLong(p, "stime", -1, true);
-        //etime = PropertiesConstants.getLong(p, "etime", -1, true);        
-        //mvers = PropertiesConstants.getInt(p, "version", -1, true);
-        //row = PropertiesConstants.getString(p, "row", row, true);
-        //col = PropertiesConstants.getString(p, "col", col, true);
-
-    	stime = p.GetValue("stime", stime, false, true);
-    	etime = p.GetValue("etime", etime, false, true);
-    	mvers = p.GetValue("mvers", mvers, false, true);
+        // stime = PropertiesConstants.getLong(p, "stime", -1, true);
+        // etime = PropertiesConstants.getLong(p, "etime", -1, true);
+        // mvers = PropertiesConstants.getInt(p, "version", -1, true);
+        // row = PropertiesConstants.getString(p, "row", row, true);
+        // col = PropertiesConstants.getString(p, "col", col, true);
+        stime = p.GetValue("stime", stime, false, true);
+        etime = p.GetValue("etime", etime, false, true);
+        mvers = p.GetValue("mvers", mvers, false, true);
         row = p.GetValue("row", row, false, true);
         col = p.GetValue("col", col, false, true);
     }
@@ -90,11 +90,13 @@ public class HGet extends HTableOperation {
     
     @Override
     protected void onExecute(HTable hTable, Map<String, Object> root, Map<String, Object> current, LogicletContext ctx, ExecuteWatcher watcher) {
-    	Long startTime = Long.parseLong(ctx.transform(stime));
-    	Long endTime = Long.parseLong(ctx.transform(etime));
-    	int mversion = Integer.parseInt(ctx.transform(mvers));
-    	row = ctx.transform(row);
+        Long startTime = Long.parseLong(ctx.transform(stime));
+        Long endTime = Long.parseLong(ctx.transform(etime));
+        int mversion = Integer.parseInt(ctx.transform(mvers));
+        row = ctx.transform(row);
         col = ctx.transform(col);
+        System.err.println("==========transform==row:" + row);
+        System.err.println("==========transform==col:" + col);
         if (StringUtils.isEmpty(row)) {
             throw new BaseException("core.no_row", "It must be in a h-get context,check your script.");
         }
@@ -109,7 +111,7 @@ public class HGet extends HTableOperation {
         }
         try {
             String tagValue = ctx.transform(tag);
-            Map<String, Object> data = new HashMap<String, Object>();
+            Map<String, List<Object>> data = new HashMap<String, List<Object>>();
             if (StringUtils.isNotEmpty(tagValue)) {
                 if (startTime >= 0 && endTime >= 0) {
                     get.setTimeRange(startTime, endTime);
@@ -128,15 +130,24 @@ public class HGet extends HTableOperation {
                 String qualifier;
                 String value;
                 if (result.size() > 0) {
+                    String key;
+                    List<Object> list;
+                    System.err.println("=========result:" + result.size());
                     for (Cell cell : result.listCells()) {
                         family = new String(cell.getFamilyArray(), cell.getFamilyOffset(), cell.getFamilyLength(), CHARSET_NAME);
                         qualifier = new String(cell.getQualifierArray(), cell.getQualifierOffset(), cell.getQualifierLength(), CHARSET_NAME);
                         value = new String(cell.getValueArray(), cell.getValueOffset(), cell.getValueLength(), CHARSET_NAME);
                         if (StringUtils.isNotEmpty(qualifier)) {
-                            data.put(family + ":" + qualifier, value);
+                            key = family + ":" + qualifier;
                         } else {
-                            data.put(family, value);
+                            key = family;
                         }
+                        list = data.get(key);
+                        if (list == null) {
+                            list = new ArrayList<Object>();
+                            data.put(key, list);
+                        }
+                        list.add(value);
                     }
                 }
             }
