@@ -52,7 +52,8 @@ public class HBaseTable extends Segment {
         }
         try {
             String tableName = ctx.transform(tname); 
-            System.out.println("=====tname:" + tname + "======table:" + tableName);
+            // System.out.println("=====tname:" + tname + "======table:" +
+            // tableName);
             if (StringUtils.isNotEmpty(tname)) {
                 HTable t = new HTable(conf, tableName);
                 ctx.setObject(cid, t);

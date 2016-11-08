@@ -23,7 +23,6 @@ import com.alogic.xscript.hbase.util.FColumnUtil;
 import com.alogic.xscript.hbase.util.FilterBuilder;
 import com.anysoft.util.BaseException;
 import com.anysoft.util.Properties;
-import com.anysoft.util.PropertiesConstants;
 import com.anysoft.util.XmlElementProperties;
 import com.anysoft.util.XmlTools;
 
@@ -94,7 +93,7 @@ public class HScan extends HTableOperation {
         //col = PropertiesConstants.getString(p, "col", col, true);
         stime = p.GetValue("stime", stime, false, true);
         stime = p.GetValue("stime", stime, false, true);
-        mvers = p.GetValue("mvers", mvers, false, true);
+        mvers = p.GetValue("version", mvers, false, true);
         col = p.GetValue("col", col, false, true);
     }
 

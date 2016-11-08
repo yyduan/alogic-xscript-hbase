@@ -67,7 +67,7 @@ public class HGet extends HTableOperation {
         // col = PropertiesConstants.getString(p, "col", col, true);
         stime = p.GetValue("stime", stime, false, true);
         etime = p.GetValue("etime", etime, false, true);
-        mvers = p.GetValue("mvers", mvers, false, true);
+        mvers = p.GetValue("version", mvers, false, true);
         row = p.GetValue("row", row, false, true);
         col = p.GetValue("col", col, false, true);
     }
@@ -95,8 +95,8 @@ public class HGet extends HTableOperation {
         int mversion = Integer.parseInt(ctx.transform(mvers));
         row = ctx.transform(row);
         col = ctx.transform(col);
-        System.err.println("==========transform==row:" + row);
-        System.err.println("==========transform==col:" + col);
+        // System.err.println("==========transform==row:" + row);
+        // System.err.println("==========transform==col:" + col);
         if (StringUtils.isEmpty(row)) {
             throw new BaseException("core.no_row", "It must be in a h-get context,check your script.");
         }
