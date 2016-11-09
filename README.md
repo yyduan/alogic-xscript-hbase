@@ -40,25 +40,31 @@ alogic-xscript-hbase是基于xscript2.0的hbase插件，提供了使用hbase所�
 
 为了运行上面的指令，你必须要做下列工作：
 
-windwos下操作：
+#### windwos下操作：
 
-1. 修改hosts文件，对hbase主机ip映射。例如在C:\Windows\System32\Drivers\etc\HOSTS文件添加一下几行：
-   ```
+1. 修改hosts文件，对hbase主机ip映射。例如在C:\Windows\System32\Drivers\etc\HOSTS文件添加以下几行：
+```
    132.122.1.11    h2a1.ecloud.com
    132.122.1.12    h2m1.ecloud.com
    132.122.1.13    h2m2.ecloud.com
-   ```
+   
+   132.122.1.17    h2i1.ecloud.com
+   132.122.1.20    h2i2.ecloud.com
+
+   132.122.1.169	h3m1.ecloud.com
+   132.122.1.170	h3m2.ecloud.com
+```
 2. 在settings.xml配置[krb5.ini](src/test/resources/conf/krb5.ini)文件路径,例如：
-   ```
+```
    <settings>
 		 <parameter id="krb.ini" value="C:\\krb5.ini" final="true"/>
 	</settings>
-   ```
+```
 3. 采用loginUserFromKeytab登录配置时，需要你在132.122.1.13主机/etc/security/keytabs下拷贝自己需要的用户keytab文件，demo的[keytab文件](src/test/resources/conf/ems.app.keytab)。
 
 4. hbase必要配置文件([core-site.xml](src/test/resources/conf/core-site.xml)、[hbase-site.xml](src/test/resources/conf/hbase-site.xml)等)自行拷贝到自己项目中的resources目录下，会默认加载此文件夹。
 
-linux下操作：
+#### linux下操作：
 
 1. linux下也可以采用默认conf.create()配置，如果采用loginUserFromKeytab登录配置时，需要你在132.122.1.13主机/etc/security/keytabs下拷贝自己需要的用户keytab文件，demo的[keytab文件](src/test/resources/conf/ems.app.keytab)。
 
