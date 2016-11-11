@@ -40,7 +40,7 @@ alogic-xscript-hbase是基于xscript2.0的hbase插件，提供了使用hbase所�
 
 为了运行上面的指令，你必须要做下列工作：
 
-#### windwos下操作：
+#### windows下操作：
 
 1. 修改hosts文件，对hbase主机ip映射。例如在C:\Windows\System32\Drivers\etc\HOSTS文件添加以下几行：
 ```
