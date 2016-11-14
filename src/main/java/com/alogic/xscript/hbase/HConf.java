@@ -9,7 +9,6 @@ import com.alogic.xscript.ExecuteWatcher;
 import com.alogic.xscript.Logiclet;
 import com.alogic.xscript.LogicletContext;
 import com.alogic.xscript.plugins.Segment;
-import com.anysoft.util.BaseException;
 import com.anysoft.util.Properties;
 import com.anysoft.util.PropertiesConstants;
 
@@ -60,13 +59,10 @@ public class HConf extends Segment {
 
     @Override
     protected void onExecute(Map<String, Object> root, Map<String, Object> current, LogicletContext ctx, ExecuteWatcher watcher) {
-        String callType = System.getProperty("os.name");
-        // 1.加入krb5.ini文件，用于window请求
-        if (callType.indexOf("Windows") > -1) {
-            if (krb == null) {
-                throw new BaseException("core.no_krb", "windows must has krb.int file,check your script.");
-            }
-            System.setProperty("javax.xml.parsers.DocumentBuilderFactory", "com.sun.org.apache.xerces.internal.jaxp.DocumentBuilderFactoryImpl");
+        // String callType = System.getProperty("os.name");
+        // 1.加入krb5.ini文件
+        System.setProperty("javax.xml.parsers.DocumentBuilderFactory", "com.sun.org.apache.xerces.internal.jaxp.DocumentBuilderFactoryImpl");
+        if (krb != null) {
             System.setProperty("java.security.krb5.conf", krb);
         }
         // 此处获取Configuration的方式待优化

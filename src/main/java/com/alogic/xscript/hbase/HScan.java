@@ -100,13 +100,13 @@ public class HScan extends HTableOperation {
     @Override
     protected void onExecute(HTable hTable, Map<String, Object> root, Map<String, Object> current, LogicletContext ctx, ExecuteWatcher watcher) {
         Scan scan = new Scan();
-        srow = ctx.transform(srow);
-        erow = ctx.transform(erow);
+        String startrow = ctx.transform(srow);
+        String endrow = ctx.transform(erow);
     	Long startTime = Long.parseLong(ctx.transform(stime));
     	Long endTime = Long.parseLong(ctx.transform(etime));
     	int mversion = Integer.parseInt(ctx.transform(mvers));
-        col = ctx.transform(col);
-        byte[][] fcBytes = FColumnUtil.getFamilyAndColumnBytes(col);
+        String column = ctx.transform(col);
+        byte[][] fcBytes = FColumnUtil.getFamilyAndColumnBytes(column);
         if (fcBytes != null) {
             if (fcBytes[1] != null) {
                 scan.addColumn(fcBytes[0], fcBytes[1]);
@@ -118,11 +118,11 @@ public class HScan extends HTableOperation {
             String tagValue = ctx.transform(tag);
             List<Map<String, Object>> rows = new ArrayList<>();
             if (StringUtils.isNotEmpty(tagValue)) {
-                if (StringUtils.isNotEmpty(srow)) {
-                    scan.setStartRow(Bytes.toBytes(srow));
+                if (StringUtils.isNotEmpty(startrow)) {
+                    scan.setStartRow(Bytes.toBytes(startrow));
                 }
-                if (StringUtils.isNotEmpty(erow)) {
-                    scan.setStopRow(Bytes.toBytes(erow));
+                if (StringUtils.isNotEmpty(endrow)) {
+                    scan.setStopRow(Bytes.toBytes(endrow));
                 }
                 if (startTime >= 0 && endTime >= 0) {
                     scan.setTimeRange(startTime, endTime);
