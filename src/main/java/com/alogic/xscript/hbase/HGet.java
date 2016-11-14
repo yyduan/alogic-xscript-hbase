@@ -26,10 +26,10 @@ import com.anysoft.util.XmlElementProperties;
 import com.anysoft.util.XmlTools;
 
 public class HGet extends HTableOperation {
-	/**
-	 * Filter Builder
-	 */
-	protected FilterBuilder fb = null;
+    /**
+     * Filter Builder
+     */
+    protected FilterBuilder fb = null;
     /**
      * 指定查询开始时间戳
      */
@@ -38,7 +38,7 @@ public class HGet extends HTableOperation {
      * 指定查询结束时间戳
      */
     protected String etime = "-1";
-    
+
     /**
      * 列出的版本最大数
      */
@@ -58,8 +58,8 @@ public class HGet extends HTableOperation {
     }
 
     @Override
-    public void configure(Properties p){
-    	super.configure(p);
+    public void configure(Properties p) {
+        super.configure(p);
         // stime = PropertiesConstants.getLong(p, "stime", -1, true);
         // etime = PropertiesConstants.getLong(p, "etime", -1, true);
         // mvers = PropertiesConstants.getInt(p, "version", -1, true);
@@ -71,37 +71,37 @@ public class HGet extends HTableOperation {
         row = p.GetValue("row", row, false, true);
         col = p.GetValue("col", col, false, true);
     }
-    
+
     @Override
-    public void configure(Element e,Properties p){
-    	Properties props = new XmlElementProperties(e,p);
-    	
-    	Element filter = XmlTools.getFirstElementByPath(e, "filter");
-    	if (filter != null){
-	    	FilterBuilder.TheFactory f = new FilterBuilder.TheFactory();
-	    	try {
-	    		fb = f.newInstance(filter, props, "module");
-	    	}catch (Exception ex){
-	    		log("Can not create instance of FilterBuilder.","error");
-	    	}
-    	}
-    	configure(props);
-    }    
-    
+    public void configure(Element e, Properties p) {
+        Properties props = new XmlElementProperties(e, p);
+
+        Element filter = XmlTools.getFirstElementByPath(e, "filter");
+        if (filter != null) {
+            FilterBuilder.TheFactory f = new FilterBuilder.TheFactory();
+            try {
+                fb = f.newInstance(filter, props, "module");
+            } catch (Exception ex) {
+                log("Can not create instance of FilterBuilder.", "error");
+            }
+        }
+        configure(props);
+    }
+
     @Override
     protected void onExecute(HTable hTable, Map<String, Object> root, Map<String, Object> current, LogicletContext ctx, ExecuteWatcher watcher) {
         Long startTime = Long.parseLong(ctx.transform(stime));
         Long endTime = Long.parseLong(ctx.transform(etime));
         int mversion = Integer.parseInt(ctx.transform(mvers));
-        row = ctx.transform(row);
-        col = ctx.transform(col);
-        // System.err.println("==========transform==row:" + row);
-        // System.err.println("==========transform==col:" + col);
-        if (StringUtils.isEmpty(row)) {
+        String rowkey = ctx.transform(row);
+        String column = ctx.transform(col);
+        System.err.println("c==========transform==row:" + rowkey);
+        System.err.println("c==========transform==col:" + column);
+        if (StringUtils.isEmpty(rowkey)) {
             throw new BaseException("core.no_row", "It must be in a h-get context,check your script.");
         }
-        Get get = new Get(Bytes.toBytes(row));
-        byte[][] fcBytes = FColumnUtil.getFamilyAndColumnBytes(col);
+        Get get = new Get(Bytes.toBytes(rowkey));
+        byte[][] fcBytes = FColumnUtil.getFamilyAndColumnBytes(column);
         if (fcBytes != null) {
             if (fcBytes[1] != null) {
                 get.addColumn(fcBytes[0], fcBytes[1]);
@@ -119,11 +119,11 @@ public class HGet extends HTableOperation {
                 if (mversion >= 0) {
                     get.setMaxVersions(mversion);
                 }
-                if (fb != null){
-                	Filter f = fb.getFilter(ctx);
-                	if (f != null){
-                		get.setFilter(f);
-                	}
+                if (fb != null) {
+                    Filter f = fb.getFilter(ctx);
+                    if (f != null) {
+                        get.setFilter(f);
+                    }
                 }
                 Result result = hTable.get(get);
                 String family;
@@ -156,6 +156,5 @@ public class HGet extends HTableOperation {
             throw new BaseException("core.hbase_get_error", e.getMessage());
         }
     }
-
 
 }
