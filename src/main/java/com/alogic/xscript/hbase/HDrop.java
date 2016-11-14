@@ -40,23 +40,23 @@ public class HDrop extends HAdminOperation {
 
     @Override
     protected void onExecute(HBaseAdmin hBaseAdmin, Map<String, Object> root, Map<String, Object> current, LogicletContext ctx, ExecuteWatcher watcher) {
-    	tname = ctx.transform(tname);
-        if (StringUtils.isEmpty(tname)) {
+    	String tableName = ctx.transform(tname);
+        if (StringUtils.isEmpty(tableName)) {
             throw new BaseException("core.no_tname", "It must be in a h-drop context,check your script.");
         }
         try {
             // 第2步
             // 使用HBaseAdmin类的disableTable()方法禁止表。
-            hBaseAdmin.disableTable(tname);
+            hBaseAdmin.disableTable(tableName);
             // 第3步
             // 现在使用HBaseAdmin类的deleteTable()方法删除表。
-            hBaseAdmin.deleteTable(tname);
+            hBaseAdmin.deleteTable(tableName);
             System.out.println("drop success");
-            log(String.format("drop [%s] success!", tname), "info");
+            log(String.format("drop [%s] success!", tableName), "info");
         } catch (IOException e) {
             // TODO Auto-generated catch block
             // e.printStackTrace();
-            log(String.format("drop [%s] error,msg:[%s]", tname, e.toString()), "error");
+            log(String.format("drop [%s] error,msg:[%s]", tableName, e.toString()), "error");
             throw new BaseException("core.io_exception", e.getMessage());
         }
     }

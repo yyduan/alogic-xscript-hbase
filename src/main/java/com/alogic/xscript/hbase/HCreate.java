@@ -47,7 +47,7 @@ public class HCreate extends HAdminOperation {
     public void configure(Properties p) {
         super.configure(p);
 
-        //cf = PropertiesConstants.getString(p, "cf", cf, true);
+        //cf = PropertiesConstants.getString(p, "cf", cf, true);       
         cf = p.GetValue("cf", cf, false, true);
         //tname = PropertiesConstants.getString(p, "tname", tname, true);
         tname = p.GetValue("tname", tname, false, true);
@@ -58,42 +58,40 @@ public class HCreate extends HAdminOperation {
 
     @Override
     protected void onExecute(HBaseAdmin hBaseAdmin, Map<String, Object> root, Map<String, Object> current, LogicletContext ctx, ExecuteWatcher watcher) {
-    	System.out.println(tname);
         if (StringUtils.isEmpty(tname)) {
             throw new BaseException("core.no_tname", "It must be in a h-create context,check your script.");
         }
         if (StringUtils.isEmpty(cf)) {
             throw new BaseException("core.no_cf", "It must be in a h-create context,check your script.");
         }
-        tname = ctx.transform(tname);
-        cf = ctx.transform(cf);
-        System.out.println(tname);
+        String tableName = ctx.transform(tname);
+        String colFamily = ctx.transform(cf);
 
         try {
-            if (hBaseAdmin.tableExists(tname)) {
+            if (hBaseAdmin.tableExists(tableName)) {
                 if (Boolean.parseBoolean(ctx.transform(cover))) {
-                    hBaseAdmin.disableTable(tname);
-                    hBaseAdmin.deleteTable(tname);
-                    log(String.format("[%s] is exist,detele....", tname), "warn");
+                    hBaseAdmin.disableTable(tableName);
+                    hBaseAdmin.deleteTable(tableName);
+                    log(String.format("[%s] is exist,detele....", tableName), "warn");
                 } else {
-                    throw new BaseException("core.tableExists", "create table '" + tname + "' exist,check your script.");
+                    throw new BaseException("core.tableExists", "create table '" + tableName + "' exist,check your script.");
                 }
             }
             // 新建一个students表的描述
-            HTableDescriptor tableDesc = new HTableDescriptor(TableName.valueOf(tname));
-            String[] columnFamilys = cf.split(",");
+            HTableDescriptor tableDesc = new HTableDescriptor(TableName.valueOf(tableName));
+            String[] columnFamilys = colFamily.split(",");
             // 在描述里添加列族
             for (String columnFamily : columnFamilys) {
                 tableDesc.addFamily(new HColumnDescriptor(columnFamily));
             }
             // 根据配置好的描述建表
             hBaseAdmin.createTable(tableDesc);
-            System.out.println(cf);
-            log(String.format("create [%s] success!", tname), "info");
+            System.out.println(colFamily);
+            log(String.format("create [%s] success!", tableName), "info");
         } catch (IOException e) {
             // TODO Auto-generated catch block
             // e.printStackTrace();
-            log(String.format("create [%s] error,msg:[%s]", tname, e.toString()), "error");
+            log(String.format("create [%s] error,msg:[%s]", tableName, e.toString()), "error");
             throw new BaseException("core.io_exception", e.getMessage());
         }
     }

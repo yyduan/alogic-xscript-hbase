@@ -49,14 +49,14 @@ public class HDelete extends HTableOperation {
     @Override
     protected void onExecute(HTable hTable, Map<String, Object> root, Map<String, Object> current, LogicletContext ctx, ExecuteWatcher watcher) {
     	
-        row = ctx.transform(row);
-        col = ctx.transform(col);
+        String rowKey = ctx.transform(row);
+        String colomn = ctx.transform(col);
         
-        if (StringUtils.isEmpty(row)) {
+        if (StringUtils.isEmpty(rowKey)) {
             throw new BaseException("core.no_row", "It must be in a h-delete context,check your script.");
         }
-        Delete delete = new Delete(Bytes.toBytes(row));
-        byte[][] fcBytes = FColumnUtil.getFamilyAndColumnBytes(col);
+        Delete delete = new Delete(Bytes.toBytes(rowKey));
+        byte[][] fcBytes = FColumnUtil.getFamilyAndColumnBytes(colomn);
         if (fcBytes != null) {
             if (fcBytes[1] != null) {
                 delete.deleteColumn(fcBytes[0], fcBytes[1]);
