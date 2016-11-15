@@ -11,7 +11,6 @@ import com.alogic.xscript.Logiclet;
 import com.alogic.xscript.LogicletContext;
 import com.anysoft.util.BaseException;
 import com.anysoft.util.Properties;
-import com.anysoft.util.PropertiesConstants;
 
 /**
  * 在hbase中删除指定的表

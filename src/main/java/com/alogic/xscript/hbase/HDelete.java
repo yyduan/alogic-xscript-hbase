@@ -14,7 +14,6 @@ import com.alogic.xscript.LogicletContext;
 import com.alogic.xscript.hbase.util.FColumnUtil;
 import com.anysoft.util.BaseException;
 import com.anysoft.util.Properties;
-import com.anysoft.util.PropertiesConstants;
 
 /**
  * 执行Delete操作
