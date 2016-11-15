@@ -92,7 +92,7 @@ public class HScan extends HTableOperation {
         //mvers = PropertiesConstants.getInt(p, "version", -1, true);
         //col = PropertiesConstants.getString(p, "col", col, true);
         stime = p.GetValue("stime", stime, false, true);
-        stime = p.GetValue("stime", stime, false, true);
+        etime = p.GetValue("etime", etime, false, true);
         mvers = p.GetValue("version", mvers, false, true);
         col = p.GetValue("col", col, false, true);
     }
