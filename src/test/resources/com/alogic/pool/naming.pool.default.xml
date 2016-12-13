@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<naming>
+	<context module="com.alogic.pool.context.Inner">
+		<pool id="h2" module="com.alogic.xscript.hbase.HConfFactory">
+		    <parameter id="krb5" value="C:\\hbase\\h2\\krb5.ini" />
+			<parameter id="core_site_xml" value="C:\\hbase\\h2\\core-site.xml"/>
+			<parameter id="hbase_site_xml" value="C:\\hbase\\h2\\hbase-site.xml"/>
+			<parameter id="loginUser" value="ems/h2m2.ecloud.com"/>
+			<parameter id="keytabPath" value="C:\\hbase\\h2\\ems.app.keytab"/>
+		</pool>
+		<pool id="h3" module="com.alogic.xscript.hbase.HConfFactory">
+		    <parameter id="krb5" value="C:\\hbase\\h2\\krb5.ini" />
+			<parameter id="core_site_xml" value="C:\\hbase\\h2\\core-site.xml"/>
+			<parameter id="hbase_site_xml" value="C:\\hbase\\h2\\hbase-site.xml"/>
+			<parameter id="loginUser" value="ems/h2m2.ecloud.com"/>
+			<parameter id="keytabPath" value="C:\\hbase\\h2\\ems.app.keytab"/>
+		</pool>
+	</context>
+</naming>

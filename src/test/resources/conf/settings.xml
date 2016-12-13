@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <settings>
-		 <parameter id="krb.ini" value="C:\\krb5.ini" final="true"/>
+		 <!-- <parameter id="krb.ini" value="C:\\hbase\\krb5.ini" final="true"/> -->
 <!-- 		<parameter id="core.site.xml" value="C:\\hbase\\h3\\core-site.xml" final="true"/>
 		<parameter id="hbase.site.xml" value="C:\\hbase\\h3\\hbase-site.xml" final="true"/> -->
 	 	<!-- <parameter id="loginUser" value="odp/h3a1.ecloud.com" final="true"/>
@@ -18,4 +18,7 @@
 		<parameter id="loginUser" value="ems/c15m1.ecld.com" final="true"/>
 		<parameter id="keytabPath" value="C:\\hbase\\c15\\ems.app.keytab" final="true"/>  -->
 		
+		<parameter id="krb.ini" value="C:\\hbase\\h2\\krb5.ini" final="true" />
+		<parameter id="core.site.xml" value="C:\\hbase\\h2\\core-site.xml" final="true"/>
+		<parameter id="hbase.site.xml" value="C:\\hbase\\h2\\hbase-site.xml" final="true"/>
 </settings>

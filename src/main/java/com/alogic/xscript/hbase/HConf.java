@@ -1,10 +1,17 @@
 package com.alogic.xscript.hbase;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.util.Iterator;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hbase.HBaseConfiguration;
 
+import com.alogic.pool.Pool;
+import com.alogic.pool.PoolNaming;
 import com.alogic.xscript.ExecuteWatcher;
 import com.alogic.xscript.Logiclet;
 import com.alogic.xscript.LogicletContext;
@@ -26,8 +33,10 @@ public class HConf extends Segment {
      */
     protected String krb = null;
 
-    // protected String core_site_xml = null;
-    // protected String hbase_site_xml = null;
+    protected String core_site_xml = null;
+    protected String hbase_site_xml = null;
+
+    protected String poolId = null;
 
     public HConf(String tag, Logiclet p) {
         super(tag, p);
@@ -51,10 +60,9 @@ public class HConf extends Segment {
 
         cid = PropertiesConstants.getString(p, "cid", cid);
         krb = PropertiesConstants.getString(p, "krb.ini", krb);
-        // core_site_xml = PropertiesConstants.getString(p, "core.site.xml",
-        // core_site_xml);
-        // hbase_site_xml = PropertiesConstants.getString(p, "hbase.site.xml",
-        // hbase_site_xml);
+        core_site_xml = PropertiesConstants.getString(p, "core.site.xml", core_site_xml);
+        hbase_site_xml = PropertiesConstants.getString(p, "hbase.site.xml", hbase_site_xml);
+        poolId = PropertiesConstants.getString(p, "poolId", poolId);
     }
 
     @Override
@@ -66,52 +74,75 @@ public class HConf extends Segment {
             System.setProperty("java.security.krb5.conf", krb);
         }
         // 此处获取Configuration的方式待优化
-        Configuration conf = HBaseConfiguration.create();
+        // Configuration conf = HBaseConfiguration.create();
         // 载入core-size.xml和hbase-site.xml必要文件
-        // try {
-        // if (core_site_xml != null) {
-        // conf.addResource(new FileInputStream(new File(core_site_xml)));
-        // }
-        // } catch (FileNotFoundException e) {
-        // log(String.format("Can not find the file[%s]", core_site_xml),
-        // "error");
-        // }
-        // try {
-        // if (hbase_site_xml != null) {
-        // conf.addResource(new FileInputStream(new File(hbase_site_xml)));
-        // }
-        // } catch (FileNotFoundException e) {
-        // log(String.format("Can not find the file[%s]", hbase_site_xml),
-        // "error");
-        // }
 
-        // // 不同hbase集群下不同配置zookeeper
-        // if (hbaseZookeeperQuorum != null) {
-        // conf.set("hbase.zookeeper.quorum", hbaseZookeeperQuorum);
-        // }
-        // if (zookeeperZnodeParent != null) {
-        // conf.set("zookeeper.znode.parent", zookeeperZnodeParent);
-        // }
+       // Settings settings = Settings.get();
+        //settings.SetValue("naming.master", "java:///com/alogic/naming/demo/naming.pool.xml#" + NamingDemo.class.getName());
 
-        // loginUser = "ems/h2m2.ecloud.com";
-        // keytabPath = "C:\\ems.app.keytab";
-        // Iterator<Entry<String, String>> iter = conf.iterator();
-        // Entry<String, String> entry;
-        // while (iter.hasNext()) {
-        // entry = iter.next();
-        // System.err.println("====" + entry.getKey() + "=" + entry.getValue());
-        // }
-        // System.err.println("====:" + JSON.toString(conf));
-        // UserGroupInformation.setConfiguration(conf);
-        // // 3.window下，采用loginUserFromKeytab登录，需要user和keytab
-        // if (loginUser != null && keytabPath != null) {
-        // try {
-        // UserGroupInformation.loginUserFromKeytab(loginUser, keytabPath);
-        // } catch (IOException e) {
-        // // e.printStackTrace();
-        // log("loginUserFromKeytab fail,e:" + e.toString(), "error");
-        // }
-        // }
+        PoolNaming naming = PoolNaming.get();
+        if (poolId == null) {
+            poolId = "default";
+        }
+        // System.out.println("====poolId:" + poolId);
+        Pool pool = naming.lookup(poolId);
+
+        Configuration conf = null;
+        try {
+            conf = pool.borrowObject(0, 0);
+        } catch (Exception e1) {
+            // TODO Auto-generated catch block
+            e1.printStackTrace();
+            conf = null;
+        }
+        System.out.println("@@@@=====get hbase pool conf=" + conf);
+        log(String.format("@@@@=====get hbase pool conf=", conf), "info");
+        if (conf == null) {
+            conf = HBaseConfiguration.create();
+            try {
+                if (core_site_xml != null) {
+                    conf.addResource(new FileInputStream(new File(core_site_xml)));
+                }
+            } catch (FileNotFoundException e) {
+                log(String.format("Can not find the file[%s]", core_site_xml), "error");
+            }
+            try {
+                if (hbase_site_xml != null) {
+                    conf.addResource(new FileInputStream(new File(hbase_site_xml)));
+                }
+            } catch (FileNotFoundException e) {
+                log(String.format("Can not find the file[%s]", hbase_site_xml), "error");
+            }
+
+            // // 不同hbase集群下不同配置zookeeper
+            // if (hbaseZookeeperQuorum != null) {
+            // conf.set("hbase.zookeeper.quorum", hbaseZookeeperQuorum);
+            // }
+            // if (zookeeperZnodeParent != null) {
+            // conf.set("zookeeper.znode.parent", zookeeperZnodeParent);
+            // }
+
+            // loginUser = "ems/h2m2.ecloud.com";
+            // keytabPath = "C:\\ems.app.keytab";
+            Iterator<Entry<String, String>> iter = conf.iterator();
+            Entry<String, String> entry;
+            while (iter.hasNext()) {
+                entry = iter.next();
+                System.err.println("====" + entry.getKey() + "=" + entry.getValue());
+            }
+            // System.err.println("====:" + JSON.toString(conf));
+            // UserGroupInformation.setConfiguration(conf);
+            // // 3.window下，采用loginUserFromKeytab登录，需要user和keytab
+            // if (loginUser != null && keytabPath != null) {
+            // try {
+            // UserGroupInformation.loginUserFromKeytab(loginUser, keytabPath);
+            // } catch (IOException e) {
+            // // e.printStackTrace();
+            // log("loginUserFromKeytab fail,e:" + e.toString(), "error");
+            // }
+            // }
+        }
+
         try {
             ctx.setObject(cid, conf);
             super.onExecute(root, current, ctx, watcher);
