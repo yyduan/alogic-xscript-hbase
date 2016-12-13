@@ -76,7 +76,6 @@ public class HConfigurationFactory extends Singleton {
     }
 
     public Configuration create() {
-
         // String callType = System.getProperty("os.name");
         // 1.加入krb5.ini文件
         System.setProperty("javax.xml.parsers.DocumentBuilderFactory", "com.sun.org.apache.xerces.internal.jaxp.DocumentBuilderFactoryImpl");
