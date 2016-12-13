@@ -20,41 +20,42 @@ import com.anysoft.util.PropertiesConstants;
  *
  */
 public class HConfSet extends Segment {
-    protected String pid = "$h-conf";
-    protected String id = "";
-    protected String value = "";
+	protected String pid = "$h-conf";
+	protected String id = "";
+	protected String value = "";
 
-    public HConfSet(String tag, Logiclet p) {
-        super(tag, p);
-    }
+	public HConfSet(String tag, Logiclet p) {
+		super(tag, p);
+	}
 
-    @Override
-    public void configure(Properties p) {
-        super.configure(p);
-        pid = PropertiesConstants.getString(p, "pid", pid, true);
-        id = PropertiesConstants.getString(p, "id", id, true);
-        value = PropertiesConstants.getString(p, "value", value, true);
-    }
+	@Override
+	public void configure(Properties p) {
+		super.configure(p);
+		pid = PropertiesConstants.getString(p, "pid", pid, true);
+		id = PropertiesConstants.getString(p, "id", id, true);
+		value = PropertiesConstants.getString(p, "value", value, true);
+	}
 
-    @Override
-    protected void onExecute(Map<String, Object> root, Map<String, Object> current, LogicletContext ctx, ExecuteWatcher watcher) {
-        // 此处获取Configuration的方式待优化
-        Configuration conf = ctx.getObject(pid);
-        if (conf == null) {
-            throw new BaseException("core.no_conf", "It must be in a h-conf context,check your script.");
-        }
-        if (StringUtils.isEmpty(id)) {
-            throw new BaseException("core.no_id", "It must be in a h-conf-set context,check your script.");
-        }
-        if (StringUtils.isEmpty(value)) {
-            throw new BaseException("core.no_value", "It must be in a h-conf-set context,check your script.");
-        }
-        conf.set(id, value);
-        // ctx.setObject(pid, conf);
-        /*
-         * try { super.onExecute(root, current, ctx, watcher); } finally { //
-         * ctx.removeObject(pid); }
-         */
+	@Override
+	protected void onExecute(Map<String, Object> root, Map<String, Object> current, LogicletContext ctx,
+			ExecuteWatcher watcher) {
+		// 此处获取Configuration的方式待优化
+		Configuration conf = ctx.getObject(pid);
+		if (conf == null) {
+			throw new BaseException("core.no_conf", "It must be in a h-conf context,check your script.");
+		}
+		if (StringUtils.isEmpty(id)) {
+			throw new BaseException("core.no_id", "It must be in a h-conf-set context,check your script.");
+		}
+		if (StringUtils.isEmpty(value)) {
+			throw new BaseException("core.no_value", "It must be in a h-conf-set context,check your script.");
+		}
+		conf.set(id, value);
+		// ctx.setObject(pid, conf);
+		/*
+		 * try { super.onExecute(root, current, ctx, watcher); } finally { //
+		 * ctx.removeObject(pid); }
+		 */
 
-    }
+	}
 }

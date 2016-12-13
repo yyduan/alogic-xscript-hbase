@@ -9,6 +9,8 @@ import java.lang.reflect.Field;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hbase.HBaseConfiguration;
 import org.apache.hadoop.security.UserGroupInformation;
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -23,6 +25,8 @@ import com.anysoft.util.XmlTools;
  *
  */
 public class HConfigurationFactory extends Singleton {
+	
+	protected static final Logger logger = LogManager.getLogger(HConfigurationFactory.class);
 
     public static String krb5 = null;
     public static String core_site_xml = null;
@@ -60,7 +64,7 @@ public class HConfigurationFactory extends Singleton {
             }
         } catch (Exception exc) {
             // TODO Auto-generated catch block
-        	exc.printStackTrace();
+        	 logger.error("error"+exc);
         }
 
         configure(props);
@@ -88,17 +92,14 @@ public class HConfigurationFactory extends Singleton {
                 conf.addResource(new FileInputStream(new File(core_site_xml)));
             }
         } catch (FileNotFoundException e) {
-            // log(String.format("Can not find the file[%s]", core_site_xml),
-            // "error");
+             logger.error(String.format("Can not find the file[%s]", core_site_xml));
         }
         try {
             if (hbase_site_xml != null) {
                 conf.addResource(new FileInputStream(new File(hbase_site_xml)));
             }
         } catch (FileNotFoundException e) {
-            // log(String.format("Can not find the file[%s]", hbase_site_xml),
-            // "error");
-            e.printStackTrace();
+        	 logger.error(String.format("Can not find the file[%s]", hbase_site_xml));
         }
 
         // 采用loginUserFromKeytab登录，需要user和keytab
@@ -107,8 +108,7 @@ public class HConfigurationFactory extends Singleton {
             try {
                 UserGroupInformation.loginUserFromKeytab(loginUser, keytabPath);
             } catch (IOException e) {
-                e.printStackTrace();
-                // log("loginUserFromKeytab fail,e:" + e.toString(), "error");
+            	logger.error("loginUserFromKeytab fail,e:" + e.toString());
             }
         }
         return conf;

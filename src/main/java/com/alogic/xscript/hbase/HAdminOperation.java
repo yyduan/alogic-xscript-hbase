@@ -20,38 +20,40 @@ import com.anysoft.util.PropertiesConstants;
  *
  */
 public abstract class HAdminOperation extends AbstractLogiclet {
-    /**
-     * hadmin的cid
-     */
-    private String pid = "$h-admin";
+	/**
+	 * hadmin的cid
+	 */
+	private String pid = "$h-admin";
 
-    /**
-     * 返回结果的id
-     */
-    protected String id;
+	/**
+	 * 返回结果的id
+	 */
+	protected String id;
 
-    public HAdminOperation(String tag, Logiclet p) {
-        super(tag, p);
-    }
+	public HAdminOperation(String tag, Logiclet p) {
+		super(tag, p);
+	}
 
-    @Override
-    public void configure(Properties p) {
-        super.configure(p);
-        pid = PropertiesConstants.getString(p, "pid", pid, true);
-        id = PropertiesConstants.getString(p, "id", "$" + getXmlTag(), true);
-    }
+	@Override
+	public void configure(Properties p) {
+		super.configure(p);
+		pid = PropertiesConstants.getString(p, "pid", pid, true);
+		id = PropertiesConstants.getString(p, "id", "$" + getXmlTag(), true);
+	}
 
-    @Override
-    protected void onExecute(Map<String, Object> root, Map<String, Object> current, LogicletContext ctx, ExecuteWatcher watcher) {
-        HBaseAdmin hAdmin = ctx.getObject(pid);
-        if (hAdmin == null) {
-            throw new BaseException("core.no_hadmin", "It must be in a h-admin context,check your script.");
-        }
-        if (StringUtils.isNotEmpty(id)) {
-            onExecute(hAdmin, root, current, ctx, watcher);
-        }
-    }
+	@Override
+	protected void onExecute(Map<String, Object> root, Map<String, Object> current, LogicletContext ctx,
+			ExecuteWatcher watcher) {
+		HBaseAdmin hAdmin = ctx.getObject(pid);
+		if (hAdmin == null) {
+			throw new BaseException("core.no_hadmin", "It must be in a h-admin context,check your script.");
+		}
+		if (StringUtils.isNotEmpty(id)) {
+			onExecute(hAdmin, root, current, ctx, watcher);
+		}
+	}
 
-    protected abstract void onExecute(HBaseAdmin hBaseAdmin, Map<String, Object> root, Map<String, Object> current, LogicletContext ctx, ExecuteWatcher watcher);
+	protected abstract void onExecute(HBaseAdmin hBaseAdmin, Map<String, Object> root, Map<String, Object> current,
+			LogicletContext ctx, ExecuteWatcher watcher);
 
 }

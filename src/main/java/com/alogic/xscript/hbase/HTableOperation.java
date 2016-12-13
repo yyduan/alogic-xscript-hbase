@@ -20,49 +20,51 @@ import com.anysoft.util.PropertiesConstants;
  *
  */
 public abstract class HTableOperation extends AbstractLogiclet {
-    /**
-     * hadmin的cid
-     */
-    private String pid = "$h-table";
-    /**
-     * 数据集
-     */
-    protected String tag = "data";
+	/**
+	 * hadmin的cid
+	 */
+	private String pid = "$h-table";
+	/**
+	 * 数据集
+	 */
+	protected String tag = "data";
 
-    /**
-     * 获取数据的默认编码
-     */
-    protected static String CHARSET_NAME = "UTF-8";
+	/**
+	 * 获取数据的默认编码
+	 */
+	protected static String CHARSET_NAME = "UTF-8";
 
-    /**
-     * 返回结果的id
-     */
-    protected String id;
+	/**
+	 * 返回结果的id
+	 */
+	protected String id;
 
-    public HTableOperation(String tag, Logiclet p) {
-        super(tag, p);
-    }
+	public HTableOperation(String tag, Logiclet p) {
+		super(tag, p);
+	}
 
-    @Override
-    public void configure(Properties p) {
-        super.configure(p);
-        pid = PropertiesConstants.getString(p, "pid", pid, true);
-        tag = PropertiesConstants.getString(p, "tag", tag, true);
-        id = PropertiesConstants.getString(p, "id", "$" + getXmlTag(), true);
+	@Override
+	public void configure(Properties p) {
+		super.configure(p);
+		pid = PropertiesConstants.getString(p, "pid", pid, true);
+		tag = PropertiesConstants.getString(p, "tag", tag, true);
+		id = PropertiesConstants.getString(p, "id", "$" + getXmlTag(), true);
 
-    }
+	}
 
-    @Override
-    protected void onExecute(Map<String, Object> root, Map<String, Object> current, LogicletContext ctx, ExecuteWatcher watcher) {
-        HTable hTable = ctx.getObject(pid);
-        if (hTable == null) {
-            throw new BaseException("core.no_htable", "It must be in a h-table context,check your script.");
-        }
-        if (StringUtils.isNotEmpty(id)) {
-            onExecute(hTable, root, current, ctx, watcher);
-        }
-    }
+	@Override
+	protected void onExecute(Map<String, Object> root, Map<String, Object> current, LogicletContext ctx,
+			ExecuteWatcher watcher) {
+		HTable hTable = ctx.getObject(pid);
+		if (hTable == null) {
+			throw new BaseException("core.no_htable", "It must be in a h-table context,check your script.");
+		}
+		if (StringUtils.isNotEmpty(id)) {
+			onExecute(hTable, root, current, ctx, watcher);
+		}
+	}
 
-    protected abstract void onExecute(HTable hTable, Map<String, Object> root, Map<String, Object> current, LogicletContext ctx, ExecuteWatcher watcher);
+	protected abstract void onExecute(HTable hTable, Map<String, Object> root, Map<String, Object> current,
+			LogicletContext ctx, ExecuteWatcher watcher);
 
 }

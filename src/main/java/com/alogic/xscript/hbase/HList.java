@@ -24,39 +24,40 @@ import com.anysoft.util.PropertiesConstants;
  */
 public class HList extends HAdminOperation {
 
-    /**
-     * 数据集
-     */
-    protected String tag = "data";
+	/**
+	 * 数据集
+	 */
+	protected String tag = "data";
 
-    public HList(String tag, Logiclet p) {
-        super(tag, p);
-    }
+	public HList(String tag, Logiclet p) {
+		super(tag, p);
+	}
 
-    @Override
-    public void configure(Properties p) {
-        super.configure(p);
-        tag = PropertiesConstants.getString(p, "tag", tag, true);
-    }
+	@Override
+	public void configure(Properties p) {
+		super.configure(p);
+		tag = PropertiesConstants.getString(p, "tag", tag, true);
+	}
 
-    @Override
-    protected void onExecute(HBaseAdmin hBaseAdmin, Map<String, Object> root, Map<String, Object> current, LogicletContext ctx, ExecuteWatcher watcher) {
-        String tagValue = ctx.transform(tag);
-        if (StringUtils.isNotEmpty(tagValue)) {
-            List<Object> data = new ArrayList<Object>();
-            try {
-                HTableDescriptor[] tableDescriptor = hBaseAdmin.listTables();
-                // printing all the table names.
-                for (int i = 0; i < tableDescriptor.length; i++) {
-                    data.add(tableDescriptor[i].getNameAsString());
-                }
-            } catch (IOException e) {
-                // TODO Auto-generated catch block
-                // e.printStackTrace();
-                log(String.format("list tables error,msg:[%s]", e.toString()), "error");
-                throw new BaseException("core.io_exception", e.getMessage());
-            }
-            current.put(tagValue, data);
-        }
-    }
+	@Override
+	protected void onExecute(HBaseAdmin hBaseAdmin, Map<String, Object> root, Map<String, Object> current,
+			LogicletContext ctx, ExecuteWatcher watcher) {
+		String tagValue = ctx.transform(tag);
+		if (StringUtils.isNotEmpty(tagValue)) {
+			List<Object> data = new ArrayList<Object>();
+			try {
+				HTableDescriptor[] tableDescriptor = hBaseAdmin.listTables();
+				// printing all the table names.
+				for (int i = 0; i < tableDescriptor.length; i++) {
+					data.add(tableDescriptor[i].getNameAsString());
+				}
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				// e.printStackTrace();
+				log(String.format("list tables error,msg:[%s]", e.toString()), "error");
+				throw new BaseException("core.io_exception", e.getMessage());
+			}
+			current.put(tagValue, data);
+		}
+	}
 }
