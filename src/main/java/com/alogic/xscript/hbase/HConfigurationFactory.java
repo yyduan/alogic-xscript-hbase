@@ -55,15 +55,14 @@ public class HConfigurationFactory extends Singleton {
                     if (n.getNodeType() != Node.ELEMENT_NODE) {
                         continue;
                     }
-                    Element elem = (Element) n;
-                    if (field.getName().equals(elem.getAttribute("id"))) {
+                    Element element = (Element) n;
+                    if (field.getName().equals(element.getAttribute("id"))) {
                         field.setAccessible(true);
-                        field.set(obj, field.getType().cast(elem.getAttribute("value")));
+                        field.set(obj, field.getType().cast(element.getAttribute("value")));
                     }
                 }
             }
         } catch (Exception exc) {
-            // TODO Auto-generated catch block
         	 logger.error("error"+exc);
         }
 
