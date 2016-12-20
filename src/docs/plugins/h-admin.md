@@ -28,8 +28,8 @@ com.alogic.xscript.hbase.HAdmin
 
 ```xml
 	<script>
-	<using xmlTag = "kv-conf" module="com.alogic.xscript.hbase.HConf"/>
-	<h-conf zkQuorum="h2a1.ecloud.com,h2m1.ecloud.com,h2m2.ecloud.com" zkParent="/hbase-secure">
+	<using xmlTag = "h-conf" module="com.alogic.xscript.hbase.HConf"/>
+	<h-conf>
 		<h-admin >
 			
 		</h-admin>

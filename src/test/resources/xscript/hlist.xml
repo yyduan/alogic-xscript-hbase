@@ -2,7 +2,7 @@
 <script>
 	<using xmlTag = "h-conf" module="com.alogic.xscript.hbase.HConf"/>
 	<!-- <h-conf zkQuorum="h3a1.ecloud.com,h3m1.ecloud.com,h3m2.ecloud.com" zkParent="/hbase-h3"> -->
- 	<h-conf poolId="h2"> 
+ 	<h-conf> 
 		<!-- <h-conf-set id="hbase.zookeeper.quorum" value="10.142.90.57:8089" />
 		<h-conf-set id="zookeeper.znode.parent" value="/hbase-j3" />
 		<h-conf-user path="C:\\hbase\\j3\\eops.app.keytab" user="eops/a5-302-hw-xh628-019.ecld.com" /> -->
