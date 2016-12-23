@@ -60,7 +60,7 @@ public class HConf extends Segment {
 		krb = PropertiesConstants.getString(p, "krb.ini", krb);
 		core_site_xml = PropertiesConstants.getString(p, "core.site.xml", core_site_xml);
 		hbase_site_xml = PropertiesConstants.getString(p, "hbase.site.xml", hbase_site_xml);
-		poolId = PropertiesConstants.getString(p, "poolId", poolId);
+        poolId = PropertiesConstants.getRaw(p, "poolId", poolId);
 	}
 
 	@Override
@@ -77,10 +77,10 @@ public class HConf extends Segment {
 		// Configuration conf = HBaseConfiguration.create();
 		// 载入core-size.xml和hbase-site.xml必要文件
 		PoolNaming naming = PoolNaming.get();
-        String poolName = ctx.transform(poolId);
-        if (poolName == null || "".equals(poolName.trim())) {
-            poolName = "default";
-		}
+        String poolName = "default";
+        if (poolId != null && !"".equals(poolId.trim())) {
+            poolName = ctx.transform(poolId);
+        }
         Pool pool = naming.lookup(poolName);
 
 		Configuration conf = null;
