@@ -34,11 +34,11 @@ public class HScan extends HTableOperation {
 	/**
 	 * 指定查询rowkey的开始点
 	 */
-	protected String srow = "-1";
+    protected String srow = "";
 	/**
 	 * 指定查询rowkey的结束点
 	 */
-	protected String erow = "-1";
+    protected String erow = "";
 
 	/**
 	 * 指定查询开始时间戳
