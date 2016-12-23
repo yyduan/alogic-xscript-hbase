@@ -3,9 +3,7 @@ package com.alogic.xscript.hbase;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.util.Iterator;
 import java.util.Map;
-import java.util.Map.Entry;
 
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hbase.HBaseConfiguration;
@@ -79,10 +77,11 @@ public class HConf extends Segment {
 		// Configuration conf = HBaseConfiguration.create();
 		// 载入core-size.xml和hbase-site.xml必要文件
 		PoolNaming naming = PoolNaming.get();
-		if (poolId == null) {
-			poolId = "default";
+        String poolName = ctx.transform(poolId);
+        if (poolName == null || "".equals(poolName.trim())) {
+            poolName = "default";
 		}
-		Pool pool = naming.lookup(poolId);
+        Pool pool = naming.lookup(poolName);
 
 		Configuration conf = null;
 		try {
@@ -120,12 +119,13 @@ public class HConf extends Segment {
 
 			// loginUser = "ems/h2m2.ecloud.com";
 			// keytabPath = "C:\\ems.app.keytab";
-			Iterator<Entry<String, String>> iter = conf.iterator();
-			Entry<String, String> entry;
-			while (iter.hasNext()) {
-				entry = iter.next();
-				System.err.println("====" + entry.getKey() + "=" + entry.getValue());
-			}
+            // Iterator<Entry<String, String>> iter = conf.iterator();
+            // Entry<String, String> entry;
+            // while (iter.hasNext()) {
+            // entry = iter.next();
+            // System.err.println("====" + entry.getKey() + "=" +
+            // entry.getValue());
+            // }
 			// System.err.println("====:" + JSON.toString(conf));
 			// UserGroupInformation.setConfiguration(conf);
 			// // 3.window下，采用loginUserFromKeytab登录，需要user和keytab
