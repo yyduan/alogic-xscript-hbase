@@ -91,7 +91,7 @@ public class HConf extends Segment {
 			e1.printStackTrace();
 			conf = null;
 		}
-        log("@@@@=====get hbase pool conf=" + conf, "info");
+//        log("@@@@=====get hbase pool conf=" + conf, "info");
 		if (conf == null) {
 			conf = HBaseConfiguration.create();
 			try {

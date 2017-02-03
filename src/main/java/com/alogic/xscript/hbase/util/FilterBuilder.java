@@ -12,8 +12,8 @@ import org.apache.hadoop.hbase.filter.FilterList;
 import org.apache.hadoop.hbase.filter.RegexStringComparator;
 import org.apache.hadoop.hbase.filter.SubstringComparator;
 import org.apache.hadoop.hbase.util.Bytes;
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -50,7 +50,7 @@ public interface FilterBuilder extends XMLConfigurable,Configurable{
 		/**
 		 * a logger of log4j
 		 */
-		protected static final Logger LOG = LogManager.getLogger(FilterBuilder.class);
+		protected static final Logger LOG = LoggerFactory.getLogger(FilterBuilder.class);
 		
 		@Override
 		public void configure(Element e, Properties p) {

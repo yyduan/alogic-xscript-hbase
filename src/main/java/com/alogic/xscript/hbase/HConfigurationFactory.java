@@ -9,8 +9,8 @@ import java.lang.reflect.Field;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hbase.HBaseConfiguration;
 import org.apache.hadoop.security.UserGroupInformation;
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -26,7 +26,7 @@ import com.anysoft.util.XmlTools;
  */
 public class HConfigurationFactory extends Singleton {
 	
-	protected static final Logger logger = LogManager.getLogger(HConfigurationFactory.class);
+	protected static final Logger logger = LoggerFactory.getLogger(HConfigurationFactory.class);
 
     public static String krb5 = null;
     public static String core_site_xml = null;
