@@ -91,8 +91,6 @@ public class HGet extends HTableOperation {
 		int mversion = Integer.parseInt(ctx.transform(mvers));
 		String rowkey = ctx.transform(row);
 		String column = ctx.transform(col);
-		System.err.println("c==========transform==row:" + rowkey);
-		System.err.println("c==========transform==col:" + column);
 		if (StringUtils.isEmpty(rowkey)) {
 			throw new BaseException("core.no_row", "It must be in a h-get context,check your script.");
 		}

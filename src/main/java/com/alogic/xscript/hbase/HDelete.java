@@ -68,7 +68,6 @@ public class HDelete extends HTableOperation {
 			hTable.delete(delete);
 			log(String.format("delete row [%s] success!", row), "info");
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			log(String.format("delete row [%s] error,msg:[%s]", row, e.toString()), "error");
 			throw new BaseException("core.io_exception", e.getMessage());
 		}

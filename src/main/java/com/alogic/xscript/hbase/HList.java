@@ -52,8 +52,6 @@ public class HList extends HAdminOperation {
 					data.add(tableDescriptor[i].getNameAsString());
 				}
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				// e.printStackTrace();
 				log(String.format("list tables error,msg:[%s]", e.toString()), "error");
 				throw new BaseException("core.io_exception", e.getMessage());
 			}

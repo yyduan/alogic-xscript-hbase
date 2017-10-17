@@ -46,8 +46,6 @@ public class HAdmin extends Segment {
 		if (conf == null) {
 			throw new BaseException("core.no_conf", "It must be in a h-conf context,check your script.");
 		}
-		// System.out.println(conf.get("hbase.zookeeper.quorum"));
-		// System.out.println(conf.get("zookeeper.znode.parent"));
 		try {
 			HBaseAdmin admin = new HBaseAdmin(conf);
 			ctx.setObject(cid, admin);

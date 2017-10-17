@@ -54,8 +54,6 @@ public class HDrop extends HAdminOperation {
 			System.out.println("drop success");
 			log(String.format("drop [%s] success!", tableName), "info");
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			// e.printStackTrace();
 			log(String.format("drop [%s] error,msg:[%s]", tableName, e.toString()), "error");
 			throw new BaseException("core.io_exception", e.getMessage());
 		}

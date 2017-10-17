@@ -68,7 +68,6 @@ public class HPut extends HTableOperation {
 		byte[] column = null;
 		byte[] family = null;
 		byte[][] fcBytes = FColumnUtil.getFamilyAndColumnBytes(colName);
-		;
 		if (fcBytes != null) {
 			family = fcBytes[0];
 			column = fcBytes[1];

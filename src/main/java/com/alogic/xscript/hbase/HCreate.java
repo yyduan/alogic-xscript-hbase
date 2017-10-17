@@ -87,7 +87,6 @@ public class HCreate extends HAdminOperation {
 			}
 			// 根据配置好的描述建表
 			hBaseAdmin.createTable(tableDesc);
-			System.out.println(colFamily);
 			log(String.format("create [%s] success!", tableName), "info");
 		} catch (IOException e) {
 			log(String.format("create [%s] error,msg:[%s]", tableName, e.toString()), "error");

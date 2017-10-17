@@ -3,7 +3,6 @@ package com.alogic.xscript.hbase;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.util.Map;
 
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hbase.HBaseConfiguration;
@@ -13,6 +12,7 @@ import com.alogic.pool.PoolNaming;
 import com.alogic.xscript.ExecuteWatcher;
 import com.alogic.xscript.Logiclet;
 import com.alogic.xscript.LogicletContext;
+import com.alogic.xscript.doc.XsObject;
 import com.alogic.xscript.plugins.Segment;
 import com.anysoft.util.Properties;
 import com.anysoft.util.PropertiesConstants;
@@ -64,7 +64,7 @@ public class HConf extends Segment {
 	}
 
 	@Override
-	protected void onExecute(Map<String, Object> root, Map<String, Object> current, LogicletContext ctx,
+	protected void onExecute(XsObject root, XsObject current, LogicletContext ctx,
 			ExecuteWatcher watcher) {
 		// String callType = System.getProperty("os.name");
 		// 1.加入krb5.ini文件

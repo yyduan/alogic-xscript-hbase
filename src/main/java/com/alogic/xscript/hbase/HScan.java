@@ -161,7 +161,6 @@ public class HScan extends HTableOperation {
 			}
 			current.put(tagValue, rows);
 		} catch (IOException e) {
-			// e.printStackTrace();
 			throw new BaseException("core.hbase_scan_error", e.getMessage());
 		}
 	}
