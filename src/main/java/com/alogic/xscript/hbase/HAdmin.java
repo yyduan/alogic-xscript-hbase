@@ -11,6 +11,7 @@ import org.apache.hadoop.hbase.client.HBaseAdmin;
 import com.alogic.xscript.ExecuteWatcher;
 import com.alogic.xscript.Logiclet;
 import com.alogic.xscript.LogicletContext;
+import com.alogic.xscript.doc.XsObject;
 import com.alogic.xscript.plugins.Segment;
 import com.anysoft.util.BaseException;
 import com.anysoft.util.Properties;
@@ -39,7 +40,7 @@ public class HAdmin extends Segment {
 	}
 
 	@Override
-	protected void onExecute(Map<String, Object> root, Map<String, Object> current, LogicletContext ctx,
+	protected void onExecute(XsObject root, XsObject current, LogicletContext ctx,
 			ExecuteWatcher watcher) {
 		// 此处获取Configuration的方式待优化
 		Configuration conf = ctx.getObject(pid);
